@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { QuestModule } from './quest/quest.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { CacheModule } from '@nestjs/cache-manager';
         CacheModule.register({
             isGlobal: true,
         }),
+        QuestModule,
     ],
     controllers: [AppController],
     providers: [AppService],
