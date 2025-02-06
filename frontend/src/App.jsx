@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import RegisterForm from './pages/RegisterForm';
+import CreateQuest from './pages/CreateQuest';
 import './App.css';
 
 function App() {
@@ -7,7 +8,7 @@ function App() {
 
   return (
     <>
-      <RegisterForm />
+       <CreateQuest />
     </>
   );
 }
