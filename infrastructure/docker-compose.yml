@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongu
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+
+volumes:
+  mongo:
+    driver: local

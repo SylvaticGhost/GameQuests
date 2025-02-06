@@ -1,0 +1,77 @@
+# compiled output
+/.next
+/node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.turbo
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+*md
+*pem
+
+.dockerignore
+docker-compose.yml
+compose-dev.yml
+.git
+.github
+.vscode
+
+Infrastucture
+
+*spec.ts
+*test.ts
+*test.tsx
+*test.js
+*test.jsx
+*spec.js
+*spec.jsx
+*spec.tsx
+
+*ispec.ts
+ispec.js
+
+offtop
+test
+
+*e2e-spec.ts
+*e2e-spec.js
+
+*mock.ts
+*mock.js
+
+*.eslintrc.js
+*.eslintrc.json
+
+*.prettierrc.js
+*.prettierrc.json
+*.prettierrc
+
+nest-cli.json
