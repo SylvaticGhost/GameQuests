@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { v4 as uuidv4 } from 'uuid';
+import { ResponseCreateDto } from '../DTOs/response.create.dto';
 
 export type ResponseDocument = Response & Document;
 
@@ -34,8 +35,14 @@ export class Response {
         this.startTime = startTime;
     }
 
-    static create(questId: string, userId: string, nickname: string) {
-        return new Response(uuidv4(), questId, userId, nickname, new Date());
+    static create(dto: ResponseCreateDto, userId: string) {
+        return new Response(
+            uuidv4(),
+            dto.questId,
+            userId,
+            dto.nickname,
+            new Date(),
+        );
     }
 
     static fromObject(obj: any) {

@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type TaskResponseDocument = TaskResponse & Document;
+export type QuestionAnswerDocument = QuestionAnswer & Document;
 
 @Schema()
-export class TaskResponse {
+export class QuestionAnswer {
     @Prop({ required: true })
     responseId: string;
 
@@ -29,4 +29,5 @@ export class TaskResponse {
     }
 }
 
-export const TaskResponseSchema = SchemaFactory.createForClass(TaskResponse);
+export const QuestionAnswerSchema =
+    SchemaFactory.createForClass(QuestionAnswer);

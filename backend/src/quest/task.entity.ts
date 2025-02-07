@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { TaskCreateDto } from './DTOs/task.create.dto';
 import {
     TaskImageBoxDocument,
@@ -12,6 +13,7 @@ import {
     TaskTextInputWithoutAnswer,
     TaskTestWithoutAnswer,
     TaskImageBoxWithoutAnswer,
+    ImageBox,
 } from './task-input.entity';
 
 export interface TaskWithoutAnswer {
@@ -93,5 +95,64 @@ export class Task {
             ...this,
             input: rest,
         } as TaskWithoutAnswer;
+    }
+
+    check(answer: string | number[] | number[][]) {
+        if (this.input instanceof TaskTextInput)
+            return this.checkTextInput(answer as string);
+
+        if (this.input instanceof TaskTest)
+            return this.checkTest(answer as number[]);
+
+        if (this.input instanceof TaskImageBox)
+            return this.checkImageBox(answer as number[][]);
+
+        throw new BadRequestException('Invalid input type');
+    }
+
+    private checkTextInput(answer: string) {
+        if (!(this.input instanceof TaskTextInput))
+            throw new BadRequestException('Invalid input type');
+
+        const input = this.input as TaskTextInput;
+        const answers = input.answer;
+
+        if (input.caseSensitive) {
+            return answers.includes(answer);
+        } else {
+            answer = answer.toLowerCase();
+            return answers.some((a) => a.toLowerCase() === answer);
+        }
+    }
+
+    private checkTest(answer: number[]) {
+        if (!(this.input instanceof TaskTest))
+            throw new BadRequestException('Invalid input type');
+
+        const input = this.input as TaskTest;
+        const answers = input.answer;
+
+        return (
+            answers.length === answer.length &&
+            answers.every((a) => answer.includes(a))
+        );
+    }
+
+    private checkImageBox(answer: number[][]) {
+        if (!(this.input instanceof TaskImageBox))
+            throw new BadRequestException('Invalid input type');
+
+        const input = this.input as TaskImageBox;
+        const userAnswer: ImageBox[] = answer.map(
+            (a) => new ImageBox(a[0], a[1]),
+        );
+        const answers = input.answer;
+
+        return (
+            answers.length === answer.length &&
+            answers.every((a) =>
+                userAnswer.some((ua) => ua.x === a.x && ua.y === a.y),
+            )
+        );
     }
 }

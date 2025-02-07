@@ -11,4 +11,8 @@ export abstract class ReadCreateRepository<T> {
     async findById(id: string): Promise<T | null> {
         return this.model.findOne({ id });
     }
+
+    protected async find(query: any): Promise<T[]> {
+        return this.model.find(query);
+    }
 }

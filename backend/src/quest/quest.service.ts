@@ -35,4 +35,8 @@ export class QuestService {
         const quest = await this.getWithPermissionCheck(id, 'owner', userId);
         await this.questRepository.delete(quest.id);
     }
+
+    async exists(id: string) {
+        return this.questRepository.exists(id);
+    }
 }

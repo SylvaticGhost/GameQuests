@@ -12,4 +12,16 @@ export class ResponseRepository extends ReadCreateRepository<Response> {
     ) {
         super(model);
     }
+
+    async lastUserResponse(
+        userId: string,
+        questId: string,
+    ): Promise<Response | null> {
+        return this.model
+            .findOne({
+                userId,
+                questId,
+            })
+            .sort({ createdAt: -1 });
+    }
 }

@@ -6,12 +6,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ResponseEnd, ResponseEndSchema } from './entities/response-end.entity';
 import { Response, ResponseSchema } from './entities/response.entity';
 import {
-    TaskResponse,
-    TaskResponseSchema,
-} from './entities/task-response.entity';
+    QuestionAnswer,
+    QuestionAnswerSchema,
+} from './entities/question-answer.entity';
 import { ResponseRepository } from './repositories/response.repository';
 import { ResponseEndRepository } from './repositories/response-end.repository';
-import { TaskResponseRepository } from './repositories/task-response.repository';
+import { QuestionAnswerRepository } from './repositories/question-answer.repository';
 import { QuestModule } from 'src/quest/quest.module';
 
 @Module({
@@ -20,7 +20,7 @@ import { QuestModule } from 'src/quest/quest.module';
         QuestModule,
         MongooseModule.forFeature([
             { name: Response.name, schema: ResponseSchema },
-            { name: TaskResponse.name, schema: TaskResponseSchema },
+            { name: QuestionAnswer.name, schema: QuestionAnswerSchema },
             { name: ResponseEnd.name, schema: ResponseEndSchema },
         ]),
     ],
@@ -29,7 +29,7 @@ import { QuestModule } from 'src/quest/quest.module';
         ResponseService,
         ResponseRepository,
         ResponseEndRepository,
-        TaskResponseRepository,
+        QuestionAnswerRepository,
     ],
 })
 export class ResponseModule {}

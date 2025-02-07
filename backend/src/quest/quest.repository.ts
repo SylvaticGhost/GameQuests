@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { QuestDocument } from './schemas/quest.schema';
 import { Model } from 'mongoose';
 import { Quest, QuestInfo } from './quest.entity';
+import { Task } from './task.entity';
+import { TaskDocument } from './schemas/task.schema';
 
 @Injectable()
 export class QuestRepository {
@@ -14,7 +16,9 @@ export class QuestRepository {
     async save(quest: Quest) {
         const model = {
             ...quest,
-            tasks: quest.tasks.map((task) => ({ ...task })),
+            tasks: quest.tasks.map((task) =>
+                Task.fromDocument(task as unknown as TaskDocument),
+            ),
         };
         const createdQuest = new this.questModel(model);
         await createdQuest.save();
@@ -22,6 +26,11 @@ export class QuestRepository {
 
     async get(id: string): Promise<Quest | null> {
         return this.find({ id });
+    }
+
+    async exists(id: string): Promise<boolean> {
+        const result = await this.questModel.exists({ id });
+        return !!result;
     }
 
     private async find(param): Promise<Quest | null> {

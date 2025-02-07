@@ -45,6 +45,11 @@ export class ImageBox {
 
     @ApiProperty({ description: 'y coordinate of box', example: 10 })
     y: number;
+
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
 }
 
 export interface TaskTextInputWithoutAnswer {
