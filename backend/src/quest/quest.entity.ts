@@ -1,6 +1,6 @@
+import { BadRequestException } from '@nestjs/common';
 import { QuestCreateDto } from './DTOs/quest.create.dto';
 import { QuestDocument } from './schemas/quest.schema';
-import { TaskDocument } from './schemas/task.schema';
 import { Task, TaskWithoutAnswer } from './task.entity';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -53,6 +53,12 @@ export class Quest implements QuestInfo {
 
     static create(dto: QuestCreateDto, ownerId: string) {
         const tasks = dto.tasks.map(Task.create);
+
+        const numbers = new Set(tasks.map((task) => task.number));
+        if (numbers.size !== tasks.length) {
+            throw new BadRequestException('Task numbers must be unique');
+        }
+
         return new Quest(
             uuidv4(),
             dto.name,

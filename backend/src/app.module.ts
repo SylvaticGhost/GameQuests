@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { QuestModule } from './quest/quest.module';
+import { ResponseModule } from './response/response.module';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { QuestModule } from './quest/quest.module';
             isGlobal: true,
         }),
         QuestModule,
+        ResponseModule,
     ],
     controllers: [AppController],
     providers: [AppService],

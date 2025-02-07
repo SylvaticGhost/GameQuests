@@ -25,17 +25,20 @@ export interface TaskWithoutAnswer {
 }
 
 export class Task {
+    number: number;
     text: string;
     image?: string;
     video?: string;
     input: TaskTextInput | TaskTest | TaskImageBox;
 
     constructor(
+        number: number,
         text: string,
         input: TaskTextInput | TaskTest | TaskImageBox,
         image?: string,
         video?: string,
     ) {
+        this.number = number;
         this.text = text;
         this.input = input;
         this.image = image;
@@ -50,7 +53,7 @@ export class Task {
             throw new Error('No input provided');
         }
 
-        return new Task(dto.text, input, dto.image, dto.video);
+        return new Task(dto.number, dto.text, input, dto.image, dto.video);
     }
 
     static fromDocument(document: TaskDocument) {
@@ -64,7 +67,13 @@ export class Task {
             input = document.input as unknown as TaskImageBox;
         }
 
-        return new Task(document.text, input, document.image, document.video);
+        return new Task(
+            document.number,
+            document.text,
+            input,
+            document.image,
+            document.video,
+        );
     }
 
     get type(): 'text' | 'test' | 'image_box' {

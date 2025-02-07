@@ -1,8 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import {
+    IsNotEmpty,
+    IsOptional,
+    IsPositive,
+    IsString,
+    IsUrl,
+} from 'class-validator';
 import { TaskImageBox, TaskTest, TaskTextInput } from '../task-input.entity';
 
 export class TaskCreateDto {
+    @IsPositive()
+    @ApiProperty({
+        description: 'number of task',
+        example: 1,
+    })
+    number: number;
+
     @IsString()
     @IsNotEmpty()
     @ApiProperty({
