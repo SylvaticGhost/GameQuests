@@ -5,7 +5,24 @@ import {
     TaskTextInputDocument,
 } from './schemas/task-input.schema';
 import { TaskDocument } from './schemas/task.schema';
-import { TaskTextInput, TaskImageBox, TaskTest } from './task-input.entity';
+import {
+    TaskTextInput,
+    TaskImageBox,
+    TaskTest,
+    TaskTextInputWithoutAnswer,
+    TaskTestWithoutAnswer,
+    TaskImageBoxWithoutAnswer,
+} from './task-input.entity';
+
+export interface TaskWithoutAnswer {
+    text: string;
+    image?: string;
+    video?: string;
+    input:
+        | TaskTextInputWithoutAnswer
+        | TaskTestWithoutAnswer
+        | TaskImageBoxWithoutAnswer;
+}
 
 export class Task {
     text: string;
@@ -58,5 +75,14 @@ export class Task {
         } else {
             return 'image_box';
         }
+    }
+
+    withoutAnswers(): TaskWithoutAnswer {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { answer, ...rest } = this.input;
+        return {
+            ...this,
+            input: rest,
+        } as TaskWithoutAnswer;
     }
 }

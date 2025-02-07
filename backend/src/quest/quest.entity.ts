@@ -1,9 +1,24 @@
 import { QuestCreateDto } from './DTOs/quest.create.dto';
 import { QuestDocument } from './schemas/quest.schema';
-import { Task } from './task.entity';
+import { TaskDocument } from './schemas/task.schema';
+import { Task, TaskWithoutAnswer } from './task.entity';
 import { v4 as uuidv4 } from 'uuid';
 
-export class Quest {
+export interface QuestInfo {
+    id: string;
+    name: string;
+    description?: string;
+    time?: string;
+    realTime: boolean;
+    startDate?: Date;
+    endDate?: Date;
+}
+
+export interface QuestWithoutAnswers extends QuestInfo {
+    tasks: TaskWithoutAnswer[];
+}
+
+export class Quest implements QuestInfo {
     id: string;
     name: string;
     description?: string;
@@ -64,14 +79,40 @@ export class Quest {
             document.time,
         );
     }
-}
 
-export interface QuestInfo {
-    id: string;
-    name: string;
-    description?: string;
-    time?: string;
-    realTime: boolean;
-    startDate?: Date;
-    endDate?: Date;
+    withoutAnswers(): QuestWithoutAnswers {
+        const filteredTasks = this.tasks.map((task) => {
+            task.input.answer = null;
+            return task;
+        });
+        const copy = this.copy();
+        copy.tasks = filteredTasks;
+        return copy;
+    }
+
+    copy(): Quest {
+        return new Quest(
+            this.id,
+            this.name,
+            this.ownerId,
+            this.tasks,
+            this.realTime,
+            this.startDate,
+            this.endDate,
+            this.description,
+            this.time,
+        );
+    }
+
+    getInfo(): QuestInfo {
+        return {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            time: this.time,
+            realTime: this.realTime,
+            startDate: this.startDate,
+            endDate: this.endDate,
+        } as QuestInfo;
+    }
 }

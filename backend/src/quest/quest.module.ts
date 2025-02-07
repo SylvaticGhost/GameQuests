@@ -4,6 +4,7 @@ import { QuestService } from './quest.service';
 import { UserModule } from 'src/user/user.module';
 import { QuestDocument, QuestSchema } from './schemas/quest.schema';
 import { MongooseModule } from '@nestjs/mongoose';
+import { QuestRepository } from './quest.repository';
 
 @Module({
     imports: [
@@ -13,6 +14,6 @@ import { MongooseModule } from '@nestjs/mongoose';
         ]),
     ],
     controllers: [QuestController],
-    providers: [QuestService],
+    providers: [QuestService, QuestRepository],
 })
 export class QuestModule {}
