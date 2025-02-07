@@ -1,19 +1,21 @@
 import { TaskCreateDto } from './DTOs/task.create.dto';
 import {
-    TaskTextInput,
-    TaskTest as TaskTestInput,
-    TaskImageBoxInput,
-} from './task-input.entity';
+    TaskImageBoxDocument,
+    TaskTestDocument,
+    TaskTextInputDocument,
+} from './schemas/task-input.schema';
+import { TaskDocument } from './schemas/task.schema';
+import { TaskTextInput, TaskImageBox, TaskTest } from './task-input.entity';
 
 export class Task {
     text: string;
     image?: string;
     video?: string;
-    input: TaskTextInput | TaskTestInput | TaskImageBoxInput;
+    input: TaskTextInput | TaskTest | TaskImageBox;
 
     constructor(
         text: string,
-        input: TaskTextInput | TaskTestInput | TaskImageBoxInput,
+        input: TaskTextInput | TaskTest | TaskImageBox,
         image?: string,
         video?: string,
     ) {
@@ -24,7 +26,7 @@ export class Task {
     }
 
     static create(dto: TaskCreateDto) {
-        const input: TaskTextInput | TaskTestInput | TaskImageBoxInput =
+        const input: TaskTextInput | TaskTest | TaskImageBox =
             dto.input_image_box ?? dto.input_test ?? dto.input_text;
 
         if (!input) {
@@ -34,10 +36,24 @@ export class Task {
         return new Task(dto.text, input, dto.image, dto.video);
     }
 
+    static fromDocument(document: TaskDocument) {
+        let input: TaskTextInput | TaskTest | TaskImageBox;
+
+        if (document.input instanceof TaskTextInputDocument) {
+            input = document.input as unknown as TaskTextInput;
+        } else if (document.input instanceof TaskTestDocument) {
+            input = document.input as TaskTest;
+        } else if (document.input instanceof TaskImageBoxDocument) {
+            input = document.input as unknown as TaskImageBox;
+        }
+
+        return new Task(document.text, input, document.image, document.video);
+    }
+
     get type(): 'text' | 'test' | 'image_box' {
         if (this.input instanceof TaskTextInput) {
             return 'text';
-        } else if (this.input instanceof TaskTestInput) {
+        } else if (this.input instanceof TaskTest) {
             return 'test';
         } else {
             return 'image_box';

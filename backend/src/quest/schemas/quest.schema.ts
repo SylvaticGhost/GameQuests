@@ -1,8 +1,10 @@
-import { Prop } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Task } from '../task.entity';
-import { TaskDef } from './task.schema';
+import { TaskSchema } from './task.schema';
+import { Document } from 'mongoose';
 
-export class QuestSchema {
+@Schema()
+export class QuestDocument extends Document {
     @Prop({ required: true })
     id: string;
 
@@ -12,10 +14,12 @@ export class QuestSchema {
     @Prop()
     description?: string;
 
+    @Prop({ required: true })
+    ownerId: string;
+
     @Prop()
     time?: string;
 
-    @Prop({ required: true })
     @Prop({ required: true })
     realTime: boolean;
 
@@ -25,6 +29,8 @@ export class QuestSchema {
     @Prop()
     endDate?: Date;
 
-    @Prop({ required: true, type: TaskDef })
+    @Prop({ required: true, type: [TaskSchema] })
     tasks: Task[];
 }
+
+export const QuestSchema = SchemaFactory.createForClass(QuestDocument);

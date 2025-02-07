@@ -31,7 +31,7 @@ export class TaskTest {
     answer: number[];
 }
 
-export class TaskImageBoxInput {
+export class TaskImageBox {
     @ApiProperty({ description: 'number of boxes in x axis', example: 10 })
     xBoxes: number;
     @ApiProperty({ description: 'number of boxes in y axis', example: 10 })

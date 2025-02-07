@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
-import {
-    TaskImageBoxInput,
-    TaskTest,
-    TaskTextInput,
-} from '../task-input.entity';
+import { TaskImageBox, TaskTest, TaskTextInput } from '../task-input.entity';
 
 export class TaskCreateDto {
     @IsString()
@@ -47,5 +43,5 @@ export class TaskCreateDto {
         description: 'answer for task with image box input',
     })
     @IsOptional()
-    input_image_box?: TaskImageBoxInput;
+    input_image_box?: TaskImageBox;
 }

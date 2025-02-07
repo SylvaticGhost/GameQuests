@@ -1,8 +1,14 @@
-import { Prop, Schema } from '@nestjs/mongoose';
-import { TaskTestDef, TaskTextInputDef } from './task-input.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import {
+    TaskImageBoxSchema,
+    TaskTestSchema,
+    TaskTextInputSchema,
+} from './task-input.schema';
+import { Document } from 'mongoose';
+import { TaskTextInput, TaskTest, TaskImageBox } from '../task-input.entity';
 
 @Schema()
-export class TaskDef {
+export class TaskDocument extends Document {
     @Prop({ required: true })
     text: string;
 
@@ -10,8 +16,13 @@ export class TaskDef {
     image?: string;
 
     @Prop()
-    type: string;
+    video?: string;
 
-    @Prop({ required: true })
-    input: TaskTextInputDef | TaskTestDef;
+    @Prop({
+        required: true,
+        type: TaskTextInputSchema || TaskTestSchema || TaskImageBoxSchema,
+    })
+    input: TaskTextInput | TaskTest | TaskImageBox;
 }
+
+export const TaskSchema = SchemaFactory.createForClass(TaskDocument);

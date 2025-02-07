@@ -1,4 +1,5 @@
 import { QuestCreateDto } from './DTOs/quest.create.dto';
+import { QuestDocument } from './schemas/quest.schema';
 import { Task } from './task.entity';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -47,6 +48,20 @@ export class Quest {
             dto.endDate,
             dto.description,
             dto.time,
+        );
+    }
+
+    static fromDocumnt(document: QuestDocument) {
+        return new Quest(
+            document.id,
+            document.name,
+            document.ownerId,
+            document.tasks,
+            document.realTime,
+            document.startDate,
+            document.endDate,
+            document.description,
+            document.time,
         );
     }
 }
