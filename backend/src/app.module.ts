@@ -3,8 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { QuestModule } from './modules/quest/quest.module';
+import { ResponseModule } from './modules/response/response.module';
+import { RatingModule } from './modules/rating/rating.module';
 
 @Module({
     imports: [
@@ -22,6 +25,9 @@ import { CacheModule } from '@nestjs/cache-manager';
         CacheModule.register({
             isGlobal: true,
         }),
+        QuestModule,
+        ResponseModule,
+        RatingModule,
     ],
     controllers: [AppController],
     providers: [AppService],

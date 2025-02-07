@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { UserService } from '../../user/user.service';
-import { UserDto } from 'src/user/DTOs/user.dto';
+import { UserService } from '../../modules/user/user.service';
+import { UserDto } from 'src/modules/user/DTOs/user.dto';
 
 export function CurrentUserDecorator() {
     //const userService = Inject(UserService);
