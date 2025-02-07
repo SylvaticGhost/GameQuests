@@ -11,7 +11,7 @@ import { QuestCreateDto } from './DTOs/quest.create.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QuestService } from './quest.service';
 import { GetPayload } from 'src/middlewares/decorators/get-payload.decorator';
-import { UserPayloadDto } from 'src/user/DTOs/user.payload.dto';
+import { UserPayloadDto } from 'src/modules/user/DTOs/user.payload.dto';
 import { AuthGuard } from 'src/middlewares/guards/auth.guard';
 import { Quest, QuestWithoutAnswers } from './quest.entity';
 import { QuestRepository } from './quest.repository';

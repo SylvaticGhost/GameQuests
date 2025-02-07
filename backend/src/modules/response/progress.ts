@@ -1,4 +1,4 @@
-import { Quest } from 'src/quest/quest.entity';
+import { Quest } from 'src/modules/quest/quest.entity';
 import { QuestionAnswer } from './entities/question-answer.entity';
 
 export class Progress {

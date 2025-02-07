@@ -4,7 +4,7 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { QuestService } from 'src/quest/quest.service';
+import { QuestService } from 'src/modules/quest/quest.service';
 import { ResponseRepository } from './repositories/response.repository';
 import { ResponseEndRepository } from './repositories/response-end.repository';
 import { QuestionAnswerRepository } from './repositories/question-answer.repository';

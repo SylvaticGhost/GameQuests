@@ -1,4 +1,4 @@
-import { TaskWithoutAnswer } from 'src/quest/task.entity';
+import { TaskWithoutAnswer } from 'src/modules/quest/task.entity';
 import { Progress } from '../progress';
 
 export class QuestionCurrentDto {

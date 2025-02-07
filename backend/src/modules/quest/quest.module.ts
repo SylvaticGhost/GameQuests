@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { QuestController } from './quest.controller';
 import { QuestService } from './quest.service';
-import { UserModule } from 'src/user/user.module';
+import { UserModule } from 'src/modules/user/user.module';
 import { QuestDocument, QuestSchema } from './schemas/quest.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { QuestRepository } from './quest.repository';
