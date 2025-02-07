@@ -15,5 +15,6 @@ import { QuestRepository } from './quest.repository';
     ],
     controllers: [QuestController],
     providers: [QuestService, QuestRepository],
+    exports: [QuestService],
 })
 export class QuestModule {}

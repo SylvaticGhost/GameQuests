@@ -47,6 +47,13 @@ export class QuestRepository {
         return foundQuest.toObject() as QuestInfo;
     }
 
+    async getTask(questId: string, number: number) {
+        const questWithTask = await this.questModel
+            .findOne({ id: questId }, { tasks: { $elemMatch: { number } } })
+            .exec();
+        return questWithTask?.tasks[0];
+    }
+
     async delete(id: string) {
         await this.questModel.deleteOne({ id });
     }
