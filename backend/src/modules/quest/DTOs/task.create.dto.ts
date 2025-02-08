@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-    IsNotEmpty,
-    IsOptional,
-    IsPositive,
-    IsString,
-    IsUrl,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsPositive, IsString, IsUrl } from 'class-validator';
 import { TaskImageBox, TaskTest, TaskTextInput } from '../task-input.entity';
 
 export class TaskCreateDto {

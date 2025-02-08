@@ -20,10 +20,7 @@ export interface TaskWithoutAnswer {
     text: string;
     image?: string;
     video?: string;
-    input:
-        | TaskTextInputWithoutAnswer
-        | TaskTestWithoutAnswer
-        | TaskImageBoxWithoutAnswer;
+    input: TaskTextInputWithoutAnswer | TaskTestWithoutAnswer | TaskImageBoxWithoutAnswer;
 }
 
 export class Task {
@@ -69,13 +66,7 @@ export class Task {
             input = document.input as unknown as TaskImageBox;
         }
 
-        return new Task(
-            document.number,
-            document.text,
-            input,
-            document.image,
-            document.video,
-        );
+        return new Task(document.number, document.text, input, document.image, document.video);
     }
 
     get type(): 'text' | 'test' | 'image_box' {
@@ -98,14 +89,11 @@ export class Task {
     }
 
     check(answer: string | number[] | number[][]) {
-        if (this.input instanceof TaskTextInput)
-            return this.checkTextInput(answer as string);
+        if (this.input instanceof TaskTextInput) return this.checkTextInput(answer as string);
 
-        if (this.input instanceof TaskTest)
-            return this.checkTest(answer as number[]);
+        if (this.input instanceof TaskTest) return this.checkTest(answer as number[]);
 
-        if (this.input instanceof TaskImageBox)
-            return this.checkImageBox(answer as number[][]);
+        if (this.input instanceof TaskImageBox) return this.checkImageBox(answer as number[][]);
 
         throw new BadRequestException('Invalid input type');
     }
@@ -126,16 +114,12 @@ export class Task {
     }
 
     private checkTest(answer: number[]) {
-        if (!(this.input instanceof TaskTest))
-            throw new BadRequestException('Invalid input type');
+        if (!(this.input instanceof TaskTest)) throw new BadRequestException('Invalid input type');
 
         const input = this.input as TaskTest;
         const answers = input.answer;
 
-        return (
-            answers.length === answer.length &&
-            answers.every((a) => answer.includes(a))
-        );
+        return answers.length === answer.length && answers.every((a) => answer.includes(a));
     }
 
     private checkImageBox(answer: number[][]) {
@@ -143,16 +127,12 @@ export class Task {
             throw new BadRequestException('Invalid input type');
 
         const input = this.input as TaskImageBox;
-        const userAnswer: ImageBox[] = answer.map(
-            (a) => new ImageBox(a[0], a[1]),
-        );
+        const userAnswer: ImageBox[] = answer.map((a) => new ImageBox(a[0], a[1]));
         const answers = input.answer;
 
         return (
             answers.length === answer.length &&
-            answers.every((a) =>
-                userAnswer.some((ua) => ua.x === a.x && ua.y === a.y),
-            )
+            answers.every((a) => userAnswer.some((ua) => ua.x === a.x && ua.y === a.y))
         );
     }
 }

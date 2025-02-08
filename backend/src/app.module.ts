@@ -35,8 +35,7 @@ import { RatingModule } from './modules/rating/rating.module';
 export class AppModule {}
 
 function getMongoURI(configService: ConfigService) {
-    const uri =
-        configService.get<string>('MONGODB_URI') || process.env.MONGODB_URI;
+    const uri = configService.get<string>('MONGODB_URI') || process.env.MONGODB_URI;
     if (!uri) {
         throw new Error('MONGODB_URI is not defined');
     }

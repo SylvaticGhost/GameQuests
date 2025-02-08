@@ -1,12 +1,4 @@
-import {
-    BadRequestException,
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Post,
-    Query,
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { QuestCreateDto } from './DTOs/quest.create.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QuestService } from './quest.service';
@@ -33,10 +25,7 @@ export class QuestController {
         description: 'Quest created',
         type: QuestCreateDto,
     })
-    async createQuest(
-        @Body() body: QuestCreateDto,
-        @GetPayload() user: UserPayloadDto,
-    ) {
+    async createQuest(@Body() body: QuestCreateDto, @GetPayload() user: UserPayloadDto) {
         return await this.questService.create(body, user.id);
     }
 
@@ -86,11 +75,7 @@ export class QuestController {
         if (!id) {
             throw new BadRequestException('Id is required');
         }
-        return await this.questService.getWithPermissionCheck(
-            id,
-            mode,
-            user.id,
-        );
+        return await this.questService.getWithPermissionCheck(id, mode, user.id);
     }
 
     @AuthGuard()
@@ -100,10 +85,7 @@ export class QuestController {
         status: 204,
         description: 'Quest deleted',
     })
-    async deleteQuest(
-        @Query('id') id: string,
-        @GetPayload() user: UserPayloadDto,
-    ) {
+    async deleteQuest(@Query('id') id: string, @GetPayload() user: UserPayloadDto) {
         return await this.questService.delete(id, user.id);
     }
 }

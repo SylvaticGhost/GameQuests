@@ -21,13 +21,7 @@ export class Response {
     @Prop({ required: true })
     startTime: Date;
 
-    constructor(
-        id: string,
-        questId: string,
-        userId: string,
-        nickname: string,
-        startTime: Date,
-    ) {
+    constructor(id: string, questId: string, userId: string, nickname: string, startTime: Date) {
         this.id = id;
         this.questId = questId;
         this.userId = userId;
@@ -36,23 +30,11 @@ export class Response {
     }
 
     static create(dto: ResponseCreateDto, userId: string) {
-        return new Response(
-            uuidv4(),
-            dto.questId,
-            userId,
-            dto.nickname,
-            new Date(),
-        );
+        return new Response(uuidv4(), dto.questId, userId, dto.nickname, new Date());
     }
 
     static fromObject(obj: any) {
-        return new Response(
-            obj.id,
-            obj.questId,
-            obj.userId,
-            obj.nickname,
-            obj.startTime,
-        );
+        return new Response(obj.id, obj.questId, obj.userId, obj.nickname, obj.startTime);
     }
 }
 

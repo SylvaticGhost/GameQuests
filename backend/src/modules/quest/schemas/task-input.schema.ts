@@ -10,9 +10,7 @@ export class TaskTextInputDocument extends Document {
     caseSensitive: boolean;
 }
 
-export const TaskTextInputSchema = SchemaFactory.createForClass(
-    TaskTextInputDocument,
-);
+export const TaskTextInputSchema = SchemaFactory.createForClass(TaskTextInputDocument);
 
 @Schema()
 export class TestVariantDocument extends Document {
@@ -26,8 +24,7 @@ export class TestVariantDocument extends Document {
     image?: string;
 }
 
-export const TestVariantSchema =
-    SchemaFactory.createForClass(TestVariantDocument);
+export const TestVariantSchema = SchemaFactory.createForClass(TestVariantDocument);
 
 @Schema()
 export class TaskTestDocument extends Document {
@@ -52,5 +49,4 @@ export class TaskImageBoxDocument extends Document {
     answer: TestVariantDocument[];
 }
 
-export const TaskImageBoxSchema =
-    SchemaFactory.createForClass(TaskImageBoxDocument);
+export const TaskImageBoxSchema = SchemaFactory.createForClass(TaskImageBoxDocument);

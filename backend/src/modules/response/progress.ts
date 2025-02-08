@@ -7,12 +7,7 @@ export class Progress {
     correct: number[];
     incorrect: number[];
 
-    constructor(
-        responseId: string,
-        total: number,
-        correct: number[],
-        incorrect: number[],
-    ) {
+    constructor(responseId: string, total: number, correct: number[], incorrect: number[]) {
         this.responseId = responseId;
         this.questions = total;
         this.correct = correct;

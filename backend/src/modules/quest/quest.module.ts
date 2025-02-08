@@ -9,9 +9,7 @@ import { QuestRepository } from './quest.repository';
 @Module({
     imports: [
         UserModule,
-        MongooseModule.forFeature([
-            { name: QuestDocument.name, schema: QuestSchema },
-        ]),
+        MongooseModule.forFeature([{ name: QuestDocument.name, schema: QuestSchema }]),
     ],
     controllers: [QuestController],
     providers: [QuestService, QuestRepository],

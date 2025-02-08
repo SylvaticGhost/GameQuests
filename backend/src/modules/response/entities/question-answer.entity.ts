@@ -16,12 +16,7 @@ export class QuestionAnswer {
     @Prop({ required: true })
     value: string;
 
-    constructor(
-        responseId: string,
-        taskNumber: number,
-        correct: boolean,
-        value: string,
-    ) {
+    constructor(responseId: string, taskNumber: number, correct: boolean, value: string) {
         this.responseId = responseId;
         this.taskNumber = taskNumber;
         this.correct = correct;
@@ -29,5 +24,4 @@ export class QuestionAnswer {
     }
 }
 
-export const QuestionAnswerSchema =
-    SchemaFactory.createForClass(QuestionAnswer);
+export const QuestionAnswerSchema = SchemaFactory.createForClass(QuestionAnswer);

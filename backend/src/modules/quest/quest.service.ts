@@ -17,11 +17,7 @@ export class QuestService {
         return this.questRepository.get(id);
     }
 
-    async getWithPermissionCheck(
-        id: string,
-        mode: 'owner' | 'default',
-        userId: string,
-    ) {
+    async getWithPermissionCheck(id: string, mode: 'owner' | 'default', userId: string) {
         const quest = await this.get(id);
 
         if (mode === 'owner' && quest.ownerId !== userId) {
