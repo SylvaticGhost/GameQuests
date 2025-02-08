@@ -1,9 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {
-    TaskImageBoxSchema,
-    TaskTestSchema,
-    TaskTextInputSchema,
-} from './task-input.schema';
+import { TaskImageBoxSchema, TaskTestSchema, TaskTextInputSchema } from './task-input.schema';
 import { Document } from 'mongoose';
 import { TaskTextInput, TaskTest, TaskImageBox } from '../task-input.entity';
 

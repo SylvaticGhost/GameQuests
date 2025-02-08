@@ -17,12 +17,7 @@ export class ResponseEnd {
     @Prop({ required: true })
     total: number;
 
-    constructor(
-        responseId: string,
-        endTime: Date,
-        score: number,
-        total: number,
-    ) {
+    constructor(responseId: string, endTime: Date, score: number, total: number) {
         this.responseId = responseId;
         this.endTime = endTime;
         this.score = score;
@@ -34,12 +29,7 @@ export class ResponseEnd {
     }
 
     static fromObject(obj: any) {
-        return new ResponseEnd(
-            obj.responseId,
-            obj.endTime,
-            obj.score,
-            obj.total,
-        );
+        return new ResponseEnd(obj.responseId, obj.endTime, obj.score, obj.total);
     }
 }
 

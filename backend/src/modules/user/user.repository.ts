@@ -19,17 +19,11 @@ export class UserRepository {
         private readonly userAuthModel: Model<UserAuthDocument>,
     ) {}
 
-    async findById(
-        id: string,
-        option: GetAuth = GetAuth.NotInclude,
-    ): Promise<User | null> {
+    async findById(id: string, option: GetAuth = GetAuth.NotInclude): Promise<User | null> {
         return this.find({ id }, option);
     }
 
-    async findByEmail(
-        email: string,
-        option: GetAuth = GetAuth.NotInclude,
-    ): Promise<User | null> {
+    async findByEmail(email: string, option: GetAuth = GetAuth.NotInclude): Promise<User | null> {
         return this.find({ email }, option);
     }
 

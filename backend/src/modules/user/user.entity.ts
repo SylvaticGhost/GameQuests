@@ -20,13 +20,7 @@ export class User {
 
     private password?: HashedPassword;
 
-    constructor(
-        id: string,
-        email: string,
-        username: string,
-        created_at: Date,
-        birthday: Date,
-    ) {
+    constructor(id: string, email: string, username: string, created_at: Date, birthday: Date) {
         this.id = id;
         this.email = email;
         this.nickname = username;
@@ -40,13 +34,7 @@ export class User {
         const id = uuidv4();
         const birthday = new Date(dto.birthday);
 
-        const user = new User(
-            id,
-            dto.email,
-            dto.nickname,
-            new Date(),
-            birthday,
-        );
+        const user = new User(id, dto.email, dto.nickname, new Date(), birthday);
         user.attachPassword(password);
 
         return user;
@@ -88,9 +76,7 @@ export class User {
 
     get hashedPassword(): HashedPassword {
         if (!this.password)
-            throw new Error(
-                'password not attached or not supported in this context',
-            );
+            throw new Error('password not attached or not supported in this context');
         return this.password;
     }
 

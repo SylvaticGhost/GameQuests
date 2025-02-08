@@ -16,9 +16,7 @@ export class QuestRepository {
     async save(quest: Quest) {
         const model = {
             ...quest,
-            tasks: quest.tasks.map((task) =>
-                Task.fromDocument(task as unknown as TaskDocument),
-            ),
+            tasks: quest.tasks.map((task) => Task.fromDocument(task as unknown as TaskDocument)),
         };
         const createdQuest = new this.questModel(model);
         await createdQuest.save();
@@ -40,19 +38,13 @@ export class QuestRepository {
     }
 
     async getUsersQuests(userId: string): Promise<QuestInfo[]> {
-        const quests = await this.questModel
-            .find({ ownerId: userId })
-            .select('-tasks')
-            .exec();
+        const quests = await this.questModel.find({ ownerId: userId }).select('-tasks').exec();
 
         return quests.map((quest) => ({ ...quest.toObject() })) as QuestInfo[];
     }
 
     async getQuestInfo(id: string): Promise<QuestInfo | null> {
-        const foundQuest = await this.questModel
-            .findOne({ id })
-            .select('-tasks')
-            .exec();
+        const foundQuest = await this.questModel.findOne({ id }).select('-tasks').exec();
         return foundQuest.toObject() as QuestInfo;
     }
 

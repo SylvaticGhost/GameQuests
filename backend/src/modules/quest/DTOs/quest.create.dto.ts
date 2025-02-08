@@ -1,10 +1,4 @@
-import {
-    IsBoolean,
-    IsDate,
-    IsNotEmpty,
-    IsOptional,
-    IsString,
-} from 'class-validator';
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { TaskCreateDto } from './task.create.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';

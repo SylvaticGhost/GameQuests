@@ -19,18 +19,14 @@ export class UserService {
     ) {}
 
     async create(creatDto: UserCreateDto) {
-        if (await this.userExists(creatDto.email))
-            return Result.badRequest('User already exists');
+        if (await this.userExists(creatDto.email)) return Result.badRequest('User already exists');
 
         const user = User.create(creatDto);
         return user.asDto;
     }
 
     async login(loginDto: UserLoginDto): Promise<Result<string>> {
-        const user = await this.userRepository.findByEmail(
-            loginDto.email,
-            GetAuth.Include,
-        );
+        const user = await this.userRepository.findByEmail(loginDto.email, GetAuth.Include);
 
         if (!user) return Result.badRequest('invalid sign in credentials');
 
@@ -39,8 +35,7 @@ export class UserService {
             user.hashedPassword,
         );
 
-        if (!passwordMatch)
-            return Result.badRequest('invalid sign in credentials');
+        if (!passwordMatch) return Result.badRequest('invalid sign in credentials');
 
         const jwt = this.generateJwtToken(user.payload);
 
@@ -56,10 +51,7 @@ export class UserService {
 
         if (fromCache) return fromCache;
 
-        const user = await this.userRepository.findById(
-            userId,
-            GetAuth.NotInclude,
-        );
+        const user = await this.userRepository.findById(userId, GetAuth.NotInclude);
 
         if (!user) return null;
 

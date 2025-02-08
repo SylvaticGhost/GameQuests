@@ -38,16 +38,11 @@ export class ResponseService {
     }
 
     async hasOpenedResponse(userId: string, questId: string) {
-        const lastResponse = await this.responseRepository.lastUserResponse(
-            userId,
-            questId,
-        );
+        const lastResponse = await this.responseRepository.lastUserResponse(userId, questId);
 
         if (!lastResponse) return false;
 
-        const responseEnd = await this.responseEndRepository.findById(
-            lastResponse.id,
-        );
+        const responseEnd = await this.responseEndRepository.findById(lastResponse.id);
 
         return !responseEnd;
     }
@@ -57,23 +52,16 @@ export class ResponseService {
 
         if (!quest) throw new NotFoundException('Quest not found');
 
-        const response = await this.responseRepository.lastUserResponse(
-            userId,
-            questId,
-        );
+        const response = await this.responseRepository.lastUserResponse(userId, questId);
 
         if (!response) throw new NotFoundException('Response not found');
 
-        const answers = await this.questionAnswerRepository.findByResponseId(
-            response.id,
-        );
+        const answers = await this.questionAnswerRepository.findByResponseId(response.id);
 
         const progress = Progress.for(quest, answers);
 
         const number = answers.length > 0 ? progress.last + 1 : 1;
-        const next = quest.tasks
-            .find((t) => t.number == number)
-            .withoutAnswers();
+        const next = quest.tasks.find((t) => t.number == number).withoutAnswers();
 
         return { progress, next } as QuestionCurrentDto;
     }
@@ -90,28 +78,17 @@ export class ResponseService {
         if (userId && response.userId !== userId)
             throw new ForbiddenException('Response does not belong to you');
 
-        if (
-            await this.questionAnswerRepository.exists(
-                response.id,
-                dto.question,
-            )
-        )
+        if (await this.questionAnswerRepository.exists(response.id, dto.question))
             throw new ConflictException('Question already answered');
 
         const task = quest.tasks.find((t) => t.number == dto.question);
 
-        const userAnswer =
-            dto.text_answer || dto.test_answer || dto.image_box_answer;
+        const userAnswer = dto.text_answer || dto.test_answer || dto.image_box_answer;
         const correct = task.check(userAnswer);
 
         const value: string = JSON.stringify(userAnswer);
 
-        const answer = new QuestionAnswer(
-            response.id,
-            dto.question,
-            correct,
-            value,
-        );
+        const answer = new QuestionAnswer(response.id, dto.question, correct, value);
 
         await this.questionAnswerRepository.create(answer);
 
