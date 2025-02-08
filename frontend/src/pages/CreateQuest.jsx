@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Button,
@@ -22,13 +22,14 @@ const CreateQuest = () => {
   const [questionType, setQuestionType] = useState("single");
   const [questionCount, setQuestionCount] = useState(1);
   const [questions, setQuestions] = useState([
-    { question: "", answers: ["", "", "", ""], correctIndex: 0 },
+    { question: "", answers: ["", ""], correctIndex: 0 },
   ]);
   const [currentPage, setCurrentPage] = useState(1);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const newQuestions = Array.from({ length: questionCount }, (_, i) =>
-      questions[i] || { question: "", answers: ["", "", "", ""], correctIndex: 0 }
+      questions[i] || { question: "", answers: ["", ""], correctIndex: 0 }
     );
     setQuestions(newQuestions);
     if (currentPage > questionCount) {
@@ -56,29 +57,66 @@ const CreateQuest = () => {
 
   const handleDeleteAnswer = (qIndex, aIndex) => {
     const newQuestions = [...questions];
-    newQuestions[qIndex].answers.splice(aIndex, 1);
-    setQuestions(newQuestions);
+    if (newQuestions[qIndex].answers.length > 2) {
+      newQuestions[qIndex].answers.splice(aIndex, 1);
+      setQuestions(newQuestions);
+    } else {
+      alert("Each question must have at least 2 answers.");
+    }
   };
+
+const handleAddQuestion = () => {
+  if (questionCount < 1) {
+    alert("You must have at least 1 question in your quest.");
+  } else {
+    setQuestionCount(questionCount + 1);
+  }
+}
+
+const handleAddAnswer = (qIndex) => {
+  const newQuestions = [...questions];
+  if (newQuestions[qIndex].answers.length < 10) {
+    newQuestions[qIndex].answers.push("");
+    setQuestions(newQuestions);
+  } else {
+    alert("Each question can have a maximum of 10 answers.");
+  }
+};
 
   const filledQuestionsCount = questions.filter(
     (q) => q.question.trim() !== "" && q.answers.filter((a) => a.trim() !== "").length >= 2
   ).length;
 
   const handleSubmit = () => {
+    const hasCorrectAnswer = questions.every(
+      (q) => q.answers[q.correctIndex].trim() !== ""
+    );
+
+    if (!hasCorrectAnswer) {
+      alert("Each question must have at least one correct answer.");
+      return;
+    }
     console.log({ questName, description, timeLimit, questionCount, questions });
+  };
+
+  const handleIconClick = () => {
+    inputRef.current.focus();
   };
 
   return (
     <Box
       sx={{
-        p: 4,
-        bgcolor: "#000",
-        color: "#0f0",
+        p: 2,
+        bgcolor: "#fff",
+        color: "#000",
         minHeight: "100vh",
         "& .MuiTextField-root": {
-          bgcolor: "#222",
-          color: "#0f0",
-          borderRadius: 1,
+          bgcolor: "#f0f0f0",
+          color: "#000",
+          borderRadius: 4,
+        },
+        "& .MuiInputLabel-root": {
+          borderRadius: 4,
         },
       }}
     >
@@ -88,13 +126,26 @@ const CreateQuest = () => {
 
       <Grid container spacing={4}>
         {/* Left Side Inputs */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <TextField
             fullWidth
+            multiline
             label="Quest Name"
             value={questName}
             onChange={(e) => setQuestName(e.target.value)}
-            sx={{ mb: 2, input: { color: "#0f0" } }}
+            sx={{ mb: 2, input: { color: "#000" } }}
+           slotProps={{
+            input: {
+              sx: {
+                borderRadius: 4,
+              },
+            },
+            inputLabel: {
+              sx: {
+                borderRadius: 4,
+              },
+            },
+           }}
           />
           <TextField
             fullWidth
@@ -102,7 +153,19 @@ const CreateQuest = () => {
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            sx={{ mb: 2, textarea: { color: "#0f0" } }}
+            sx={{ mb: 2, textarea: { color: "#000" } }}
+            slotProps={{
+              input: {
+                sx: {
+                  borderRadius: 4,
+                },
+              },
+              inputLabel: {
+                sx: {
+                  borderRadius: 4,
+                },
+              },
+             }}
           />
           <TextField
             fullWidth
@@ -110,23 +173,54 @@ const CreateQuest = () => {
             type="number"
             value={timeLimit}
             onChange={(e) => setTimeLimit(Number(e.target.value))}
-            sx={{ mb: 2, input: { color: "#0f0" } }}
+            sx={{ mb: 2, input: { color: "#000" } }}
+            slotProps={{
+              input: {
+                sx: {
+                  borderRadius: 4,
+                },
+              },
+              inputLabel: {
+                sx: {
+                  borderRadius: 4,
+                },
+              },
+             }}
           />
           <TextField
             fullWidth
             label="Number of Questions"
             type="number"
             value={questionCount}
-            onChange={(e) => setQuestionCount(Number(e.target.value))}
-            sx={{ mb: 2, input: { color: "#0f0" } }}
+            onChange={(e) => setQuestionCount(Math.max(1, Number(e.target.value)))}
+            sx={{ mb: 2, input: { color: "#000" } }}
+            slotProps={{
+              input: {
+                sx: {
+                  borderRadius: 4,
+                },
+              },
+              inputLabel: {
+                sx: {
+                  borderRadius: 4,
+                },
+              },
+             }}
           />
           <Typography variant="body1" sx={{ mt: 4 }}>
             edit your quest there. you have {questionCount - filledQuestionsCount} questions to fill
           </Typography>
+          <Button
+            variant="outlined"
+            onClick={handleAddQuestion}
+            sx={{ mt: 2, color: "#000", borderColor: "#000" }}
+          >
+            Add Question
+          </Button>
         </Grid>
 
         {/* Right Side Tabs and Question Editor */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={8}>
           <Tabs
             value={questionType}
             onChange={(e, value) => setQuestionType(value)}
@@ -134,9 +228,10 @@ const CreateQuest = () => {
             indicatorColor="secondary"
             sx={{ mb: 4 }}
           >
-            <Tab label="Single Correct" value="single" sx={{ color: questionType === "single" ? "#0f0" : "#fff" }} />
-            <Tab label="Multiple Correct" value="multiple" sx={{ color: questionType === "multiple" ? "#0f0" : "#fff" }} />
-            <Tab label="Photo Search" value="photo" sx={{ color: questionType === "photo" ? "#0f0" : "#fff" }} />
+            <Tab label="Single Correct" value="single" sx={{ color: questionType === "single" ? "#000" : "#888" }} />
+            <Tab label="Multiple Correct" value="multiple" sx={{ color: questionType === "multiple" ? "#000" : "#888" }} />
+            <Tab label="Text field" value="text" sx={{ color: questionType === "input" ? "#000" : "#888" }} />
+            <Tab label="Photo Search" value="photo" sx={{ color: questionType === "photo" ? "#000" : "#888" }} />
           </Tabs>
 
           {questions.length > 0 && (
@@ -150,10 +245,23 @@ const CreateQuest = () => {
                   onChange={(e) =>
                     handleQuestionChange(currentPage - 1, e.target.value)
                   }
-                  sx={{ flex: 1, mr: 1, input: { color: "#0f0" } }}
+                  sx={{ flex: 1, mr: 1, input: { color: "#000" } }}
+                  inputRef={inputRef}
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 4,
+                      },
+                    },
+                    inputLabel: {
+                      sx: {
+                        borderRadius: 4,
+                      },
+                    },
+                   }}
                 />
-                <IconButton color="inherit">
-                  <Edit sx={{ color: "#0f0" }} />
+                <IconButton color="inherit" onClick={handleIconClick}>
+                  <Edit sx={{ color: "#000" }} />
                 </IconButton>
               </Box>
 
@@ -168,7 +276,7 @@ const CreateQuest = () => {
                   >
                     <FormControlLabel
                       value={aIndex.toString()}
-                      control={<Radio sx={{ color: "#0f0" }} />}
+                      control={<Radio sx={{ color: "#000" }} />}
                       label=""
                     />
                   </RadioGroup>
@@ -179,7 +287,19 @@ const CreateQuest = () => {
                     onChange={(e) =>
                       handleAnswerChange(currentPage - 1, aIndex, e.target.value)
                     }
-                    sx={{ input: { color: "#0f0" } }}
+                    sx={{ input: { color: "#000" } }}
+                    slotProps={{
+                      input: {
+                        sx: {
+                          borderRadius: 4,
+                        },
+                      },
+                      inputLabel: {
+                        sx: {
+                          borderRadius: 4,
+                        },
+                      },
+                     }}
                   />
                   <IconButton
                     color="inherit"
@@ -190,13 +310,11 @@ const CreateQuest = () => {
                 </Box>
               ))}
 
-              <Button
+<Button
                 variant="outlined"
-                startIcon={<Add sx={{ color: "#0f0" }} />}
-                onClick={() =>
-                  handleAnswerChange(currentPage - 1, questions[currentPage - 1].answers.length, "")
-                }
-                sx={{ mb: 2, color: "#0f0", borderColor: "#0f0" }}
+                startIcon={<Add sx={{ color: "#000" }} />}
+                onClick={() => handleAddAnswer(currentPage - 1)}
+                sx={{ mb: 2, color: "#000", borderColor: "#000" }}
               >
                 Add Answer
               </Button>
@@ -208,7 +326,7 @@ const CreateQuest = () => {
             count={questions.length}
             page={currentPage}
             onChange={(_, value) => setCurrentPage(value)}
-            sx={{ mt: 2, mb: 4, button: { color: "#0f0" } }}
+            sx={{ mt: 2, mb: 4, button: { color: "#000" } }}
           />
         </Grid>
       </Grid>
@@ -217,7 +335,7 @@ const CreateQuest = () => {
       <Button
         variant="contained"
         fullWidth
-        sx={{ mt: 4, bgcolor: "#0f0", color: "#000" }}
+        sx={{ mt: 4, bgcolor: "#000", color: "#fff" }}
         onClick={handleSubmit}
       >
         Submit
