@@ -3,8 +3,7 @@ import { HashedPassword } from './DTOs/hashed-password';
 
 export class PasswordHelper {
     static hashPassword(password: string): HashedPassword {
-        if (!password || password.length === 0)
-            throw new Error('Password is required');
+        if (!password || password.length === 0) throw new Error('Password is required');
 
         const salt = bcrypt.genSaltSync();
         const hash = bcrypt.hashSync(password, salt);
@@ -15,8 +14,7 @@ export class PasswordHelper {
         password: string,
         hashedPassword: HashedPassword,
     ): Promise<boolean> {
-        if (!password || password.length === 0)
-            throw new Error('Password is required');
+        if (!password || password.length === 0) throw new Error('Password is required');
 
         if (!hashedPassword) throw new Error('Hashed password is not provided');
 

@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { UserPayloadDto } from 'src/user/DTOs/user.payload.dto';
+import { UserPayloadDto } from 'src/modules/user/DTOs/user.payload.dto';
 
 export const GetPayload = createParamDecorator(
     (data: unknown, ctx: ExecutionContext): UserPayloadDto => {

@@ -4,23 +4,14 @@ export class Result<T = null> {
     readonly message: string;
     readonly value: T;
 
-    private constructor(
-        isSuccess: boolean,
-        code: number,
-        message: string,
-        value: T,
-    ) {
+    private constructor(isSuccess: boolean, code: number, message: string, value: T) {
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;
         this.value = value;
     }
 
-    static success<T>(
-        value?: T,
-        code: number = 200,
-        message?: string,
-    ): Result<T> {
+    static success<T>(value?: T, code: number = 200, message?: string): Result<T> {
         return new Result<T>(true, code, message, value);
     }
 
