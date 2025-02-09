@@ -12,12 +12,31 @@ function MyHistory(){
 
     return <Box sx={{ width: '100%' }}>
         <Header value={value} setValue={setValue} />
-        <Box>
+        <Box
+        sx={{
+            display: "flex",
+            padding: "24px 126px",
+            flexDirection: "column",
+            gap: 4
+        }}>
+        <Box
+        sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            alignSelf: "stretch"
+        }}>
             <Typography variant="h3" fontWeight="bold">History</Typography>
             <Typography variant="h5">Here are all the quests you’ve come across.</Typography>
         </Box>
         <SearchQuest />
-        <Box>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 1
+            }}>
             <Typography variant="h4">In Progress</Typography>
         <TabsPanel value={value} index={0}>
             <Box
@@ -41,7 +60,13 @@ function MyHistory(){
         </TabsPanel>
             <Button variant="outlined" style={{textTransform: 'none'}}>Load more</Button>
         </Box>
-        <Box>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 1
+            }}>
             <Typography variant="h4">Completed quests</Typography>
             <TabsPanel value={value} index={0}>
                 <Box
@@ -65,6 +90,7 @@ function MyHistory(){
             </TabsPanel>
             <Button variant="outlined" style={{textTransform: 'none'}}>Load more</Button>
         </Box>
+    </Box>
     </Box>
 }
 

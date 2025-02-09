@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 function MyProfile(){
     const [value, setValue] = useState(0);
 
+        // to-do: styled box component
     return <Box sx={{width: '100%'}}>
         <Header value={value} setValue={setValue} />
         <Box sx={{
