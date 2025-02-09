@@ -172,11 +172,15 @@ const CreateQuestPage = () => {
             />
           )}
 
-          {questionType === "text" && (
+{questionType === "text" && (
             <TextFieldQuestion
               question={questions[currentPage - 1].question}
+              answer={questions[currentPage - 1].answer}
               onQuestionChange={(value) =>
                 handleQuestionChange(currentPage - 1, value)
+              }
+              onAnswerChange={(value) =>
+                handleAnswerChange(currentPage - 1, 0, value)
               }
             />
           )}
