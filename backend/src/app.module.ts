@@ -8,6 +8,8 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { QuestModule } from './modules/quest/quest.module';
 import { ResponseModule } from './modules/response/response.module';
 import { RatingModule } from './modules/rating/rating.module';
+import { NotificationModule } from './modules/notification/notification.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
     imports: [
@@ -28,6 +30,8 @@ import { RatingModule } from './modules/rating/rating.module';
         QuestModule,
         ResponseModule,
         RatingModule,
+        NotificationModule,
+        EventEmitterModule.forRoot(),
     ],
     controllers: [AppController],
     providers: [AppService],

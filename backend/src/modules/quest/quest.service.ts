@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Quest } from './quest.entity';
 import { QuestCreateDto } from './DTOs/quest.create.dto';
 import { QuestRepository } from './quest.repository';
@@ -14,7 +14,9 @@ export class QuestService {
     }
 
     async get(id: string) {
-        return this.questRepository.get(id);
+        const quest = this.questRepository.get(id);
+        if (!quest) throw new NotFoundException('Quest not found');
+        return quest;
     }
 
     async getWithPermissionCheck(id: string, mode: 'owner' | 'default', userId: string) {

@@ -28,5 +28,6 @@ import { QuestModule } from 'src/modules/quest/quest.module';
         ResponseEndRepository,
         QuestionAnswerRepository,
     ],
+    exports: [ResponseService],
 })
 export class ResponseModule {}
