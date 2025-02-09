@@ -61,7 +61,7 @@ function QuestCard(props) {
                                 gap: 1
                             }}
                         >
-                            <ChecklistIcon />
+                            <ChecklistIcon sx={{color: "rgba(0, 0, 0, 0.54);"}} />
                             <Typography variant="body1" sx={{color: "rgba(0, 0, 0, 0.54);"}}>
                                 10{/*props.quantity*/} tasks
                             </Typography>
@@ -74,7 +74,7 @@ function QuestCard(props) {
                                 gap: 1
                             }}
                         >
-                            <QueryBuilderIcon />
+                            <QueryBuilderIcon sx={{color: "rgba(0, 0, 0, 0.54);"}} />
                              <Typography variant="body1" sx={{color: "rgba(0, 0, 0, 0.54);"}}>
                                 3 min{/*props.time*/}
                              </Typography>
