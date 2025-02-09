@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, TextField } from "@mui/material";
 
-const TextFieldQuestion = ({ question, onQuestionChange }) => {
+const TextFieldQuestion = ({ question, answer, onQuestionChange, onAnswerChange }) => {
   return (
     <Box>
       <TextField
@@ -16,8 +16,8 @@ const TextFieldQuestion = ({ question, onQuestionChange }) => {
         fullWidth
         multiline
         label="Add your answer here"
-        value={question}
-        onChange={(e) => onQuestionChange(e.target.value)}
+        value={answer}
+        onChange={(e) => onAnswerChange(e.target.value)}
         sx={{ mb: 2, input: { color: "#000" } }}
       />
     </Box>
@@ -25,4 +25,3 @@ const TextFieldQuestion = ({ question, onQuestionChange }) => {
 };
 
 export default TextFieldQuestion;
-
