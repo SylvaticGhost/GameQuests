@@ -1,17 +1,71 @@
-import React from "react";
-import { Box, TextField } from "@mui/material";
+import React, { useState, useRef } from "react";
+import { Box, TextField, IconButton, Typography } from "@mui/material";
+import { Add, Delete, Edit, Image, Videocam } from "@mui/icons-material";
 
 const TextFieldQuestion = ({ question, answer, onQuestionChange, onAnswerChange }) => {
+    const [questionMedia, setQuestionMedia] = useState({ type: null, url: null });
+  const inputRef = useRef(null);
+
+  const handleQuestionMediaUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileType = file.type.startsWith("video/") ? "video" : "image";
+      const mediaUrl = URL.createObjectURL(file);
+      setQuestionMedia({ type: fileType, url: mediaUrl });
+    }
+  };
+
+  const handleDeleteQuestionMedia = () => {
+    setQuestionMedia({ type: null, url: null });
+  };
+
   return (
     <Box>
-      <TextField
-        fullWidth
-        multiline
-        label="Question"
-        value={question}
-        onChange={(e) => onQuestionChange(e.target.value)}
-        sx={{ mb: 2, input: { color: "#000" } }}
-      />
+       {/* Question Input with Image/Video Upload */}
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <IconButton color="primary" component="label">
+                <Image />
+                <input hidden type="file" accept="image/*,video/*" onChange={handleQuestionMediaUpload} />
+              </IconButton>
+              <TextField
+                fullWidth
+                multiline
+                label="Question"
+                value={question}
+                onChange={(e) => onQuestionChange(e.target.value)}
+                sx={{ flex: 1, mr: 1, input: { color: "#000" } }}
+                inputRef={inputRef}
+              />
+              <IconButton color="inherit" onClick={() => inputRef.current.focus()}>
+                <Edit sx={{ color: "#000" }} />
+              </IconButton>
+            </Box>
+
+            {/* Display Question Media with Delete Button */}
+            {questionMedia.url && (
+              <Box sx={{ mb: 2, position: "relative", display: "inline-block" }}>
+                <Typography variant="body2">Question Media:</Typography>
+                {questionMedia.type === "image" ? (
+                  <img
+                    src={questionMedia.url}
+                    alt="Question"
+                    style={{ width: "100%", maxHeight: 300, objectFit: "contain", borderRadius: 8 }}
+                  />
+                ) : (
+                  <video
+                    src={questionMedia.url}
+                    controls
+                    style={{ width: "100%", maxHeight: 300, borderRadius: 8 }}
+                  />
+                )}
+                <IconButton
+                  sx={{ position: "absolute", top: 8, right: 8, bgcolor: "rgba(255,255,255,0.8)" }}
+                  onClick={handleDeleteQuestionMedia}
+                >
+                  <Delete sx={{ color: "#f00" }} />
+                </IconButton>
+              </Box>
+            )}
       <TextField
         fullWidth
         multiline

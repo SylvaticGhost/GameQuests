@@ -9,7 +9,7 @@ import {
   Radio,
   Typography,
 } from "@mui/material";
-import { Add, Delete, Edit, Image } from "@mui/icons-material";
+import { Add, Delete, Edit, Image, Videocam } from "@mui/icons-material";
 
 const TestQuestion = ({
   question,
@@ -22,19 +22,20 @@ const TestQuestion = ({
   onDeleteAnswer,
   inputRef,
 }) => {
-  const [questionImage, setQuestionImage] = useState(null);
+  const [questionMedia, setQuestionMedia] = useState({ type: null, url: null });
   const [answerImages, setAnswerImages] = useState(Array(answers.length).fill(null));
 
-  const handleQuestionImageUpload = (event) => {
+  const handleQuestionMediaUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setQuestionImage(imageUrl);
+      const fileType = file.type.startsWith("video/") ? "video" : "image";
+      const mediaUrl = URL.createObjectURL(file);
+      setQuestionMedia({ type: fileType, url: mediaUrl });
     }
   };
 
-  const handleDeleteQuestionImage = () => {
-    setQuestionImage(null);
+  const handleDeleteQuestionMedia = () => {
+    setQuestionMedia({ type: null, url: null });
   };
 
   const handleAnswerImageUpload = (index, event) => {
@@ -60,11 +61,11 @@ const TestQuestion = ({
 
   return (
     <Box>
-      {/* Question Input with Image Upload */}
+      {/* Question Input with Image/Video Upload */}
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
         <IconButton color="primary" component="label">
           <Image />
-          <input hidden type="file" accept="image/*,video/*" onChange={handleQuestionImageUpload} />
+          <input hidden type="file" accept="image/*,video/*" onChange={handleQuestionMediaUpload} />
         </IconButton>
         <TextField
           fullWidth
@@ -80,23 +81,26 @@ const TestQuestion = ({
         </IconButton>
       </Box>
 
-      {/* Display Question Image with Delete Button */}
-      {questionImage && (
+      {/* Display Question Media with Delete Button */}
+      {questionMedia.url && (
         <Box sx={{ mb: 2, position: "relative", display: "inline-block" }}>
-          <Typography variant="body2">Question Image:</Typography>
-          <img
-            src={questionImage}
-            alt="Question"
-            style={{
-              width: "100%",
-              maxHeight: 320,
-              objectFit: "contain",
-              borderRadius: 8,
-            }}
-          />
+          <Typography variant="body2">Question Media:</Typography>
+          {questionMedia.type === "image" ? (
+            <img
+              src={questionMedia.url}
+              alt="Question"
+              style={{ width: "100%", maxHeight: 300, objectFit: "contain", borderRadius: 8 }}
+            />
+          ) : (
+            <video
+              src={questionMedia.url}
+              controls
+              style={{ width: "100%", maxHeight: 300, borderRadius: 8 }}
+            />
+          )}
           <IconButton
             sx={{ position: "absolute", top: 8, right: 8, bgcolor: "rgba(255,255,255,0.8)" }}
-            onClick={handleDeleteQuestionImage}
+            onClick={handleDeleteQuestionMedia}
           >
             <Delete sx={{ color: "#f00" }} />
           </IconButton>
@@ -129,8 +133,8 @@ const TestQuestion = ({
                 src={answerImages[index]}
                 alt={`Answer ${index + 1}`}
                 style={{
-                  width: "180px",
-                  height: "180px",
+                  width: "120px",
+                  height: "120px",
                   objectFit: "contain",
                   borderRadius: 8,
                 }}
@@ -168,6 +172,7 @@ const TestQuestion = ({
 };
 
 export default TestQuestion;
+
 
 
 
