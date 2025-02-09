@@ -8,7 +8,7 @@ import quests from "../../quests.js";
 
 
 function MyHistory(){
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
 
     return <Box sx={{ width: '100%' }}>
         <Header value={value} setValue={setValue} />
