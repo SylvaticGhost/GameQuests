@@ -42,6 +42,23 @@ export class UserService {
         return Result.success(jwt);
     }
 
+    async loginWithGoogle(user) {
+        const existedUser = await this.userRepository.findByEmail(user.email, GetAuth.NotInclude);
+
+        if (!existedUser) {
+            await this.registerWithGoogle(user);
+            return this.loginWithGoogle(user);
+        }
+
+        const jwt = this.generateJwtToken(existedUser.payload);
+        return jwt;
+    }
+
+    private async registerWithGoogle(user: any) {
+        const createdUser = User.createWithGoogle(user);
+        await this.userRepository.save(createdUser);
+    }
+
     async userExists(email: string): Promise<boolean> {
         return this.userRepository.userExistsByEmail(email);
     }

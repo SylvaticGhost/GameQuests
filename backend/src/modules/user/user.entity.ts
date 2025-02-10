@@ -40,6 +40,13 @@ export class User {
         return user;
     }
 
+    public static createWithGoogle(user: any) {
+        const id = uuidv4();
+        const birthday = new Date(user.birthday);
+
+        return new User(id, user.email, user.nickname, new Date(), birthday);
+    }
+
     public static fromMongo(userDef: UserDef) {
         return new User(
             userDef.id,

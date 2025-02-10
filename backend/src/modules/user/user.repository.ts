@@ -36,9 +36,13 @@ export class UserRepository {
     }
 
     async create(user: User): Promise<User> {
-        await this.userModel.create(user);
+        await this.save(user);
         await this.userAuthModel.create(user.auth);
         return user;
+    }
+
+    async save(user: User) {
+        return this.userModel.create(user);
     }
 
     private async userExists(param): Promise<boolean> {
