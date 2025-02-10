@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   Box,
   Button,
@@ -8,6 +8,8 @@ import {
   Tabs,
   Tab,
   IconButton,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import PaginationComponent from "../../components/PaginationComponent";
@@ -19,12 +21,17 @@ const CreateQuestPage = () => {
   const [questName, setQuestName] = useState("");
   const [description, setDescription] = useState("");
   const [timeLimit, setTimeLimit] = useState(20);
-  const [questionType, setQuestionType] = useState("test");
   const [questions, setQuestions] = useState([
-    { question: "", answers: ["", ""], correctIndex: 0 },
+    { type: "test", question: "", answers: ["", ""], correctIndex: 0 },
   ]);
   const [currentPage, setCurrentPage] = useState(1);
   const inputRef = useRef(null);
+
+  const handleQuestionTypeChange = (index, type) => {
+    const newQuestions = [...questions];
+    newQuestions[index] = { type, question: "", answers: ["", ""], correctAnswers: [] };
+    setQuestions(newQuestions);
+  };
 
   const handleQuestionChange = (index, value) => {
     const newQuestions = [...questions];
@@ -65,7 +72,7 @@ const CreateQuestPage = () => {
   };
 
   const handleAddQuestion = () => {
-    setQuestions([...questions, { question: "", answers: ["", ""], correctIndex: 0 }]);
+    setQuestions([...questions, { type: "test", question: "", answers: ["", ""], correctIndex: 0 }]);
     setCurrentPage(questions.length + 1);
   };
 
@@ -80,13 +87,11 @@ const CreateQuestPage = () => {
     }
   };
 
-  const filledQuestionsCount = questions.filter(
-    (q) => q.question.trim() !== "" && q.answers.filter((a) => a.trim() !== "").length >= 2
-  ).length;
-
   const handleSubmit = () => {
-    const hasCorrectAnswer = questions.every(
-      (q) => q.answers[q.correctIndex].trim() !== ""
+    const hasCorrectAnswer = questions.every((q) =>
+      q.type === "test"
+        ? q.answers.some((_, index) => q.correctAnswers.includes(index))
+        : true
     );
 
     if (!hasCorrectAnswer) {
@@ -96,6 +101,8 @@ const CreateQuestPage = () => {
 
     console.log({ questName, description, timeLimit, questions });
   };
+
+  const currentQuestion = questions[currentPage - 1];
 
   return (
     <Box sx={{ p: 2, bgcolor: "#fff", minHeight: "100vh" }}>
@@ -110,14 +117,14 @@ const CreateQuestPage = () => {
             label="Quest Name"
             value={questName}
             onChange={(e) => setQuestName(e.target.value)}
-            sx={{ mb: 2, input: { color: "#000" } }}
+            sx={{ mb: 2 }}
           />
           <TextField
             fullWidth
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            sx={{ mb: 2, input: { color: "#000" } }}
+            sx={{ mb: 2 }}
           />
           <TextField
             fullWidth
@@ -125,15 +132,12 @@ const CreateQuestPage = () => {
             type="number"
             value={timeLimit}
             onChange={(e) => setTimeLimit(Number(e.target.value))}
-            sx={{ mb: 2, input: { color: "#000" } }}
+            sx={{ mb: 2 }}
           />
-          <Typography variant="body1" sx={{ mt: 4 }}>
-            edit your questions there. There are left {questions.length - filledQuestionsCount} questions to fill.
-          </Typography>
           <Button
             variant="outlined"
             onClick={handleAddQuestion}
-            sx={{ mt: 2, color: "#000", borderColor: "#000" }}
+            sx={{ mt: 2 }}
           >
             Add Question
           </Button>
@@ -141,8 +145,8 @@ const CreateQuestPage = () => {
 
         <Grid item xs={12} md={8}>
           <Tabs
-            value={questionType}
-            onChange={(e, value) => setQuestionType(value)}
+            value={currentQuestion.type}
+            onChange={(e, value) => handleQuestionTypeChange(currentPage - 1, value)}
             sx={{ mb: 4 }}
           >
             <Tab label="Test" value="test" />
@@ -150,54 +154,38 @@ const CreateQuestPage = () => {
             <Tab label="Photo Search" value="photo" />
           </Tabs>
 
-          {questionType === "test" && (
+          {currentQuestion.type === "test" && (
             <TestQuestion
-              question={questions[currentPage - 1].question}
-              answers={questions[currentPage - 1].answers}
-              correctIndex={questions[currentPage - 1].correctIndex}
-              onQuestionChange={(value) =>
-                handleQuestionChange(currentPage - 1, value)
-              }
-              onAnswerChange={(aIndex, value) =>
-                handleAnswerChange(currentPage - 1, aIndex, value)
-              }
-              onCorrectAnswerChange={(value) =>
-                handleCorrectAnswerChange(currentPage - 1, value)
-              }
+              question={currentQuestion.question}
+              answers={currentQuestion.answers}
+              correctIndex={currentQuestion.correctIndex}
+              onQuestionChange={(value) => handleQuestionChange(currentPage - 1, value)}
+              onAnswerChange={(aIndex, value) => handleAnswerChange(currentPage - 1, aIndex, value)}
+              onCorrectAnswerChange={(value) => handleCorrectAnswerChange(currentPage - 1, value)}
               onAddAnswer={() => handleAddAnswer(currentPage - 1)}
-              onDeleteAnswer={(aIndex) =>
-                handleDeleteAnswer(currentPage - 1, aIndex)
-              }
+              onDeleteAnswer={(aIndex) => handleDeleteAnswer(currentPage - 1, aIndex)}
               inputRef={inputRef}
             />
           )}
 
-{questionType === "text" && (
+          {currentQuestion.type === "text" && (
             <TextFieldQuestion
-              question={questions[currentPage - 1].question}
-              answer={questions[currentPage - 1].answer}
-              onQuestionChange={(value) =>
-                handleQuestionChange(currentPage - 1, value)
-              }
-              onAnswerChange={(value) =>
-                handleAnswerChange(currentPage - 1, 0, value)
-              }
+              question={currentQuestion.question}
+              answer={currentQuestion.answers[0]}
+              onQuestionChange={(value) => handleQuestionChange(currentPage - 1, value)}
+              onAnswerChange={(value) => handleAnswerChange(currentPage - 1, 0, value)}
             />
           )}
 
-          {questionType === "photo" && <PhotoSearchQuestion />}
-          <Button
-           onClick={() => handleDeleteQuestion(currentPage - 1)}
-           sx={{ color: "#f00", mb: 2 }}
-          >
-            Delete the question
-            <IconButton
-            color="inherit"
-          >
-            <Delete />
-          </IconButton>
-          </Button>
+          {currentQuestion.type === "photo" && <PhotoSearchQuestion />}
 
+          <Button
+            color="error"
+            onClick={() => handleDeleteQuestion(currentPage - 1)}
+            sx={{ mt: 2 }}
+          >
+            Delete Question
+          </Button>
 
           <PaginationComponent
             count={questions.length}
@@ -209,7 +197,7 @@ const CreateQuestPage = () => {
 
       <Button
         variant="contained"
-        sx={{ mt: 4, bgcolor: "#000", color: "#fff" }}
+        sx={{ mt: 4 }}
         onClick={handleSubmit}
       >
         Submit
