@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 export function QuestBox({ title, questions, people, id }) {
     const navigate = useNavigate();
     const handleCompleteClick = () => {
-        navigate(`/complete-quest?id=${id}`);
+        navigate(`/quest?id=${id}`);
     };
     return (
         <Box
