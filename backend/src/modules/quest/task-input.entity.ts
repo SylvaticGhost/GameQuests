@@ -36,6 +36,10 @@ export class TaskImageBox implements TaskImageBoxWithoutAnswer {
     xBoxes: number;
     @ApiProperty({ description: 'number of boxes in y axis', example: 10 })
     yBoxes: number;
+
+    @ApiProperty({ description: 'url of image', example: '*/task1-1' })
+    image: string;
+
     answer: ImageBox[];
 }
 
@@ -61,6 +65,7 @@ export interface TaskTestWithoutAnswer {
 }
 
 export interface TaskImageBoxWithoutAnswer {
+    image: string;
     xBoxes: number;
     yBoxes: number;
 }

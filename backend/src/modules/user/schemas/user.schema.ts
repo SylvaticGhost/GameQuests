@@ -16,8 +16,11 @@ export class UserDef {
     @Prop({ required: true })
     created_at: Date;
 
-    @Prop({ required: true })
+    @Prop()
     birthday: Date;
+
+    @Prop()
+    avatar?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDef);
