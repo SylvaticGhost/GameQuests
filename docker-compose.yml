@@ -39,33 +39,5 @@ services:
     environment:
       - REACT_APP_API_URL=http://localhost:3001
 
-  seaweedfs-master:
-    image: chrislusf/seaweedfs
-    container_name: seaweedfs-master
-    command: "master -ip=seaweedfs-master -defaultReplication=001"
-    ports:
-      - "9333:9333" # Master API
-      - "19333:19333" # Internal communication
-    networks:
-      - app_network
-
-  seaweedfs-volume:
-    image: chrislusf/seaweedfs
-    container_name: seaweedfs-volume
-    command: "volume -mserver=seaweedfs-master:9333 -port=8080 -publicUrl=seaweedfs-volume:8080"
-    depends_on:
-      - seaweedfs-master
-    volumes:
-      - seaweedfs_data:/data
-    ports:
-      - "8080:8080" # Volume API
-      - "18080:18080" # Admin UI
-    networks:
-      - app_network
-
 volumes:
-  seaweedfs_data:
-
-networks:
-  app_network:
-    driver: bridge
+  mongodb:
