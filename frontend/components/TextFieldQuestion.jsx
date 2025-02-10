@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
 import { Box, TextField, IconButton, Typography } from "@mui/material";
-import { Add, Delete, Edit, Image, Videocam } from "@mui/icons-material";
+import { Add, Delete, Image, Videocam, Link } from "@mui/icons-material";
 
 const TextFieldQuestion = ({ question, answer, onQuestionChange, onAnswerChange }) => {
     const [questionMedia, setQuestionMedia] = useState({ type: null, url: null });
   const inputRef = useRef(null);
+  const [youtubeLink, setYoutubeLink] = useState("");
+  const [showLinkField, setShowLinkField] = useState(false);
 
   const handleQuestionMediaUpload = (event) => {
     const file = event.target.files[0];
@@ -17,6 +19,15 @@ const TextFieldQuestion = ({ question, answer, onQuestionChange, onAnswerChange 
 
   const handleDeleteQuestionMedia = () => {
     setQuestionMedia({ type: null, url: null });
+  };
+
+  const handleAddYoutubeLink = () => {
+    setShowLinkField(true);
+  };
+
+  const handleDeleteYoutubeLink = () => {
+    setYoutubeLink("");
+    setShowLinkField(false);
   };
 
   return (
@@ -36,15 +47,14 @@ const TextFieldQuestion = ({ question, answer, onQuestionChange, onAnswerChange 
                 sx={{ flex: 1, mr: 1, input: { color: "#000" } }}
                 inputRef={inputRef}
               />
-              <IconButton color="inherit" onClick={() => inputRef.current.focus()}>
-                <Edit sx={{ color: "#000" }} />
-              </IconButton>
+               <IconButton color="primary" onClick={handleAddYoutubeLink}>
+                        <Link />
+                      </IconButton>
             </Box>
 
             {/* Display Question Media with Delete Button */}
             {questionMedia.url && (
               <Box sx={{ mb: 2, position: "relative", display: "inline-block" }}>
-                <Typography variant="body2">Question Media:</Typography>
                 {questionMedia.type === "image" ? (
                   <img
                     src={questionMedia.url}
@@ -66,6 +76,36 @@ const TextFieldQuestion = ({ question, answer, onQuestionChange, onAnswerChange 
                 </IconButton>
               </Box>
             )}
+
+               {/* YouTube Link Input */}
+                  {showLinkField && (
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                      <TextField
+                        fullWidth
+                        label="YouTube Video Link"
+                        value={youtubeLink}
+                        onChange={(e) => setYoutubeLink(e.target.value)}
+                        placeholder="https://www.youtube.com/watch?v=example"
+                      />
+                      <IconButton onClick={handleDeleteYoutubeLink}>
+                        <Delete sx={{ color: "#f00" }} />
+                      </IconButton>
+                    </Box>
+                  )}
+                      {/* Show YouTube Link */}
+                      {youtubeLink && (
+                    <Box sx={{ mt: 1, mb: 3 }}>
+                      <a
+                        href={youtubeLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "#1e88e5", textDecoration: "none", fontWeight: "bold" }}
+                      >
+                        Open YouTube Video
+                      </a>
+                    </Box>
+                  )}
+
       <TextField
         fullWidth
         multiline
