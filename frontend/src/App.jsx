@@ -3,19 +3,17 @@ import RegisterForm from './pages/RegisterForm';
 import CreateQuest from './pages/CreateQuest';
 import './App.css';
 import Main from "./pages/Main.jsx";
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import QuestView from "./pages/QuestView.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-
-        <BrowserRouter>
-            <Main />
-            <CreateQuest />
-        </BrowserRouter>
-    </>
+      <Router>
+          <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="/quest" element={<QuestView />} />
+          </Routes>
+      </Router>
   );
 }
 
