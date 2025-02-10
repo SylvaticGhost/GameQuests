@@ -45,6 +45,10 @@ export class UserRepository {
         return this.userModel.create(user);
     }
 
+    async setAvatar(id: string, url: string) {
+        await this.userModel.findOneAndUpdate({ id }, { avatar: url });
+    }
+
     private async userExists(param): Promise<boolean> {
         const userExists = await this.userModel.exists(param);
         return userExists !== null;

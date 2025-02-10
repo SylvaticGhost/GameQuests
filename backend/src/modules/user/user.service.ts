@@ -55,6 +55,7 @@ export class UserService {
     }
 
     private async registerWithGoogle(user: any) {
+        console.info(user);
         const createdUser = User.createWithGoogle(user);
         await this.userRepository.save(createdUser);
     }
@@ -75,6 +76,10 @@ export class UserService {
         await this.cacheManager.set(userId, user.asDto, 60);
 
         return user.asDto;
+    }
+
+    async setAvatar(userId: string, url: string) {
+        return this.userRepository.setAvatar(userId, url);
     }
 
     private generateJwtToken(userPayload: UserPayloadDto) {

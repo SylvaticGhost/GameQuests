@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { UserCreateDto } from './DTOs/user.create.dto';
 import { UserService } from './user.service';
@@ -8,6 +8,7 @@ import { UserDto } from './DTOs/user.dto';
 import { AuthGuard } from 'src/middlewares/guards/auth.guard';
 import { GetPayload as UserPayload } from 'src/middlewares/decorators/get-payload.decorator';
 import { GoogleGuard } from 'src/middlewares/guards/google.guard';
+import { UserPayloadDto } from './DTOs/user.payload.dto';
 
 @Controller('user')
 @ApiTags('User')
@@ -41,12 +42,20 @@ export class UserController {
         return user;
     }
 
+    @AuthGuard()
+    @Put('set-avatar')
+    @ApiOperation({ summary: 'Upload avatar' })
+    @ApiResponse({ status: 200, description: 'Avatar uploaded' })
+    async setAvatar(@UserPayload() user: UserPayloadDto, @Query('url') url: string) {
+        return await this.userService.setAvatar(user.id, url);
+    }
+
     @Get('google')
     @UseGuards(GoogleGuard)
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     async auth() {}
 
-    @Get('api/google/callback')
+    @Get('/google/callback')
     @UseGuards(GoogleGuard)
     async googleAuthCallback(@Req() req, @Res() res: Response) {
         const token = await this.userService.loginWithGoogle(req.user);
