@@ -37,11 +37,11 @@ export function QuestBox({ title, questions, people, id }) {
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 1 }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                         <PeopleIcon sx={{ mr: 0.5 }} />
-                        <Typography variant="body2">{people} People</Typography>
+                        <Typography variant="body2">{people} Tasks</Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                         <HelpOutlineIcon sx={{ mr: 0.5 }} />
-                        <Typography variant="body2">{questions} Questions</Typography>
+                        <Typography variant="body2">{questions} Time</Typography>
                     </Box>
                     <Button variant="contained" size="small" onClick={handleCompleteClick}>
                         Complete
