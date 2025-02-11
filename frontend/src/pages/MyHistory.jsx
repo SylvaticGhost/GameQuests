@@ -4,7 +4,7 @@ import SearchQuest from "../../components/SearchQuest.jsx";
 import {QuestBox} from "../../components/QuestBox.jsx";
 import Header from "../../components/Header.jsx";
 import TabsPanel from "../../components/TabsPanel.jsx";
-import quests from "../../quests.js";
+import quests from "../../arrays/quests.js";
 
 
 function MyHistory(){

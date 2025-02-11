@@ -6,6 +6,8 @@ import Main from "./pages/Main.jsx";
 import {BrowserRouter} from "react-router-dom";
 import MyHistory from "./pages/MyHistory.jsx";
 import MyProfile from "./pages/MyProfile.jsx";
+import QuestCard from "../components/QuestCard.jsx";
+import Achievements from "./pages/Achievements.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -14,8 +16,8 @@ function App() {
     <>
 
         <BrowserRouter>
-            <Main />
-            <CreateQuest />
+            {/*<Main/>
+             <CreateQuest />*/}
         </BrowserRouter>
     </>
   );

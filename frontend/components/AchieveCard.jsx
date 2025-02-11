@@ -12,10 +12,11 @@ function unlockDate(){
 }
 
 function AchieveCard(props) {
-    const [isUnlocked, setUnlock] = useState(false);
+    /*const [isUnlocked, setUnlock] = useState(false);
     function handleUnlocked() {
         setUnlock(!isUnlocked);
-    }
+    }*/
+    let isUnlocked = props.state
 
     return <Box
     sx={{
@@ -24,7 +25,9 @@ function AchieveCard(props) {
             flexDirection: "column",
             alignItems: "center",
             gap: 1,
-            width: "fit-content",
+            /*width: "fit-content",*/
+            height: "30%",
+            width: "25%",
 
             borderRadius: "6px",
             border: "1px solid #8EB8E1"
@@ -39,15 +42,15 @@ function AchieveCard(props) {
         }
         <Box>
             {isUnlocked ?
-                <Typography variant="h5" fontWeight="bold">Achievement Name</Typography> :
+                <Typography variant="h5" fontWeight="bold">{props.title}</Typography> :
                 <Typography variant="h5" fontWeight="bold">Secret Yet To Uncover</Typography>
             }
             {isUnlocked && <Typography variant="body2" sx={{color: "rgba(0, 0, 0, 0.54)"}}>
-                {unlockDate()}
+                {unlockDate()/*props.date*/}
             </Typography>}
         </Box>
         <Typography variant="body2">
-            Explanation on how to earn this achievement.
+            {props.desc}
         </Typography>
     </Box>
 }
