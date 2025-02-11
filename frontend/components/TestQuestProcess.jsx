@@ -3,9 +3,8 @@ import PaginationComponent from "./PaginationComponent";
 import { Box, Button, Container, LinearProgress, Checkbox, Typography, FormControlLabel } from "@mui/material";
 import { AccessTime } from "@mui/icons-material";
 
-const TestQuestProcess = ({ questId }) => {
+const TestQuestProcess = ({ questId, currentQuestionIndex, setCurrentQuestionIndex, totalQuestions }) => {
   const [questData, setQuestData] = useState(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
 
   useEffect(() => {
@@ -46,7 +45,7 @@ const TestQuestProcess = ({ questId }) => {
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < questData.questions.length - 1) {
+    if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswers([]);
     }
@@ -68,11 +67,11 @@ const TestQuestProcess = ({ questId }) => {
         </Typography>
         <LinearProgress
           variant="determinate"
-          value={(currentQuestionIndex / questData.questions.length) * 100}
+          value={(currentQuestionIndex / totalQuestions) * 100}
           sx={{ flex: 1, height: 8, borderRadius: 4 }}
         />
         <Typography variant="body1" sx={{ ml: 1 }}>
-          {Math.round((currentQuestionIndex / questData.questions.length) * 100)}%
+          {Math.round((currentQuestionIndex / totalQuestions) * 100)}%
         </Typography>
       </Box>
 
@@ -87,7 +86,7 @@ const TestQuestProcess = ({ questId }) => {
           {currentQuestion.text}
         </Typography>
         {currentQuestion.isPhotoQuestion && (
-          <img src={currentQuestion.coverPhoto} alt="Cover" style={{ width: "100%", height: "330px", objectFit: "contain", borderRadius: 8 }} />
+          <img src={currentQuestion.coverPhoto} alt="Cover" style={{ width: "100%", height: "300px", objectFit: "contain", borderRadius: 8 }} />
         )}
       </Box>
 
@@ -109,7 +108,7 @@ const TestQuestProcess = ({ questId }) => {
                   />
                 }
                 label={
-                  <img src={answer.photo} alt={answer.label} style={{ width: "100%", height: "230px",objectFit: "contain", borderRadius: 8 }} />
+                  <img src={answer.photo} alt={answer.label} style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: 8 }} />
                 }
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
               />
@@ -138,7 +137,7 @@ const TestQuestProcess = ({ questId }) => {
 
       {/* Pagination */}
       <PaginationComponent
-        count={questData.questions.length}
+        count={totalQuestions}
         page={currentQuestionIndex + 1}
         onChange={handlePageChange}
       />
