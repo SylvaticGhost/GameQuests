@@ -19,13 +19,11 @@ services:
     container_name: backend
     depends_on:
       - mongodb
-      - seaweedfs-master
-      - seaweedfs-volume
     ports:
       - "3001:3001"
+    env_file: ./backend/.env
     environment:
       - MONGODB_URI=mongodb://mongu:mongo@mongodb:27017/
-      - JWT_SECRET=secret
 
   frontend:
     build:
