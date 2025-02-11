@@ -19,8 +19,6 @@ services:
     container_name: backend
     depends_on:
       - mongodb
-      - seaweedfs-master
-      - seaweedfs-volume
     ports:
       - "3001:3001"
     environment:
