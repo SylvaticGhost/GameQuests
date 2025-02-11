@@ -9,7 +9,6 @@ const TestQuestProcess = ({ questId }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   useEffect(() => {
-    // Mock quest data
     const mockQuestData = {
       id: questId,
       title: "Sample Quest Title",
@@ -17,7 +16,6 @@ const TestQuestProcess = ({ questId }) => {
       questions: [
         { id: 1, text: "Question 1: What is the capital of France?", answers: ["Paris", "London", "Berlin", "Madrid"] },
         { id: 2, text: "Question 2: What is 2 + 2?", answers: ["3", "4", "5", "6"] },
-        // Add more questions as needed
       ],
     };
 
@@ -37,6 +35,11 @@ const TestQuestProcess = ({ questId }) => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentQuestionIndex(page - 1);
+    setSelectedAnswer(null);
   };
 
   const currentQuestion = questData.questions[currentQuestionIndex];
@@ -88,7 +91,11 @@ const TestQuestProcess = ({ questId }) => {
       </RadioGroup>
 
       {/* Navigation */}
-      <PaginationComponent />
+      <PaginationComponent
+        count={questData.questions.length}
+        page={currentQuestionIndex + 1}
+        onChange={handlePageChange}
+      />
 
       {/* Submit Button */}
       <Button
