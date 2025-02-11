@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
 import PaginationComponent from "./PaginationComponent";
-import { Box, Button, Container, LinearProgress, Radio, RadioGroup, Typography, FormControlLabel } from "@mui/material";
+import { Box, Button, Container, LinearProgress, Checkbox, Typography, FormControlLabel } from "@mui/material";
 import { AccessTime } from "@mui/icons-material";
 
 const TestQuestProcess = ({ questId }) => {
   const [questData, setQuestData] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [selectedAnswers, setSelectedAnswers] = useState([]);
 
   useEffect(() => {
-    // Mock quest data
     const mockQuestData = {
       id: questId,
       title: "Sample Quest Title",
       description: "This is a sample description for the quest. It contains multiple questions to test your knowledge.",
       questions: [
-        { id: 1, text: "Question 1: What is the capital of France?", answers: ["Paris", "London", "Berlin", "Madrid"] },
-        { id: 2, text: "Question 2: What is 2 + 2?", answers: ["3", "4", "5", "6"] },
-        // Add more questions as needed
+        { id: 1, text: "Question 1: What is the capital of France?", answers: ["Paris", "London", "Berlin", "Madrid"], multiple: false },
+        { id: 2, text: "Question 2: What is 2 + 2?", answers: ["3", "4", "5", "6"], multiple: true },
+        { id: 3, text: "Question 3: Identify the animal", coverPhoto: "https://animalsafari.com/wp-content/uploads/2022/03/alpaca.jpg", answers: [
+          { id: 1, photo: "https://i.pinimg.com/1200x/b2/55/42/b255421f0b8291408a38c61248718a83.jpg", label: "Answer 1" },
+          { id: 2, photo: "https://www.manhattantoy.com/cdn/shop/products/fy1x5ashh0eexiddvl0q.jpg?v=1590507238&width=1800", label: "Answer 2" },
+          { id: 3, photo: "https://i.pinimg.com/1200x/2a/ac/71/2aac719f91dd11f6a3c45dbf1d566cc1.jpg", label: "Answer 3" },
+          { id: 4, photo: "https://i.pinimg.com/1200x/df/56/10/df56105398b94b06b2e4c4df9c2c4bde.jpg", label: "Answer 4" },
+        ], multiple: false, isPhotoQuestion: true },
       ],
     };
 
@@ -29,14 +33,28 @@ const TestQuestProcess = ({ questId }) => {
   }
 
   const handleAnswerChange = (event) => {
-    setSelectedAnswer(event.target.value);
+    const value = event.target.value;
+    if (currentQuestion.multiple) {
+      setSelectedAnswers((prevSelected) =>
+        prevSelected.includes(value)
+          ? prevSelected.filter((answer) => answer !== value)
+          : [...prevSelected, value]
+      );
+    } else {
+      setSelectedAnswers([value]);
+    }
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questData.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer(null);
+      setSelectedAnswers([]);
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentQuestionIndex(page - 1);
+    setSelectedAnswers([]);
   };
 
   const currentQuestion = questData.questions[currentQuestionIndex];
@@ -68,33 +86,68 @@ const TestQuestProcess = ({ questId }) => {
         <Typography variant="h4" gutterBottom>
           {currentQuestion.text}
         </Typography>
+        {currentQuestion.isPhotoQuestion && (
+          <img src={currentQuestion.coverPhoto} alt="Cover" style={{ width: "100%", height: "330px", objectFit: "contain", borderRadius: 8 }} />
+        )}
       </Box>
 
       <Typography variant="body1" sx={{ mb: 2, fontWeight: "bold" }}>
-        Choose correct answer
+        Choose correct answer{currentQuestion.multiple ? "s" : ""}
       </Typography>
 
       {/* Answer Options */}
-      <RadioGroup value={selectedAnswer} onChange={handleAnswerChange}>
-        {currentQuestion.answers.map((answer, index) => (
+      {currentQuestion.isPhotoQuestion ? (
+        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
+          {currentQuestion.answers.map((answer, index) => (
+            <Box key={index} sx={{ width: "48%", mb: 2 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedAnswers.includes(answer.id.toString())}
+                    onChange={handleAnswerChange}
+                    value={answer.id.toString()}
+                  />
+                }
+                label={
+                  <img src={answer.photo} alt={answer.label} style={{ width: "100%", height: "230px",objectFit: "contain", borderRadius: 8 }} />
+                }
+                sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+              />
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                {answer.label}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      ) : (
+        currentQuestion.answers.map((answer, index) => (
           <FormControlLabel
             key={index}
-            value={answer}
-            control={<Radio />}
+            control={
+              <Checkbox
+                checked={selectedAnswers.includes(answer)}
+                onChange={handleAnswerChange}
+                value={answer}
+              />
+            }
             label={answer}
             sx={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #ddd", py: 1 }}
           />
-        ))}
-      </RadioGroup>
+        ))
+      )}
 
-      {/* Navigation */}
-      <PaginationComponent />
+      {/* Pagination */}
+      <PaginationComponent
+        count={questData.questions.length}
+        page={currentQuestionIndex + 1}
+        onChange={handlePageChange}
+      />
 
       {/* Submit Button */}
       <Button
         variant="contained"
         onClick={handleNextQuestion}
-        disabled={selectedAnswer === null}
+        disabled={selectedAnswers.length === 0}
         fullWidth
         sx={{ mt: 2 }}
       >
