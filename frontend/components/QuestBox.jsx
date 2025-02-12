@@ -13,11 +13,9 @@ export function QuestBox({ title, questions, people, id }) {
                 width: 400,
                 height: 250,
                 borderRadius: 2,
-                boxShadow: 3,
                 position: "relative",
                 overflow: "hidden",
                 border: "2px solid #6EDCD9",
-                boxShadow: "0px 0px 15px #6EDCD9",
                 color: "#fff",
                 transition: "0.3s",
         "&:hover": {
@@ -44,10 +42,10 @@ export function QuestBox({ title, questions, people, id }) {
           </Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <AccessTimeIcon sx={{ mr: 0.5 }} />
-            <Typography variant="body2">{questions} minutes</Typography>
+            <Typography variant="body2">{questions} mins</Typography>
           </Box>
                     <Button variant="contained" size="small" onClick={handleCompleteClick}>
-                        Complete
+                        View quest
                     </Button>
                 </Box>
             </Box>

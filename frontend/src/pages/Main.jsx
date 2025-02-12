@@ -13,6 +13,7 @@ import MyQuests from "../../components/MyQuests.jsx";
 import {QuestBox} from "../../components/QuestBox.jsx";
 import CreateQuestPage from "./CreateQuest.jsx";
 import GoogleIcon from "@mui/icons-material/Google";
+import Header from "../../components/Header.jsx";
 
 const API_URL = "http://localhost:3001/user";
 
@@ -152,7 +153,6 @@ export default function Main() {
             )}
         </Box>
 
-            {/* Регистрация */}
             <Drawer anchor="right" open={registerOpen} onClose={() => setRegisterOpen(false)}>
                 <Box sx={{ width: 300, p: 2 }}>
                     <TextField label="Email" fullWidth margin="normal" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
@@ -172,7 +172,6 @@ export default function Main() {
                 </Box>
             </Drawer>
 
-            {/* Логин */}
             <Drawer anchor="right" open={loginOpen} onClose={() => setLoginOpen(false)}>
                 <Box sx={{ width: 300, p: 2 }}>
                     <TextField label="Email" fullWidth margin="normal" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />

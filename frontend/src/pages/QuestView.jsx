@@ -53,7 +53,7 @@ const QuestView = () => {
             <Typography variant="h3" fontWeight="bold" marginBottom={2} textAlign="left">
               Title
             </Typography>
-            <Typography variant="body1" marginBottom={2} textAlign="left">
+            <Typography variant="body2" marginBottom={2} textAlign="left">
               Test your knowledge and have fun with this exciting quiz! Featuring a mix of engaging questions, this quiz will challenge you while keeping things entertaining. Whether you're playing solo or with friends, see how well you can score and learn something new along the way!
             </Typography>
             <Box sx={{ display: "flex", gap: 2 }}>
@@ -65,7 +65,7 @@ const QuestView = () => {
                 </Box>
 
                 <Box>
-                <Typography variant="body1" textAlign="left">Progress</Typography>
+                <Typography variant="h6" textAlign="left">Progress</Typography>
                     <LinearProgress variant="determinate" value={50} sx={{ height: 10, borderRadius: 5, marginBottom: 1 }} />
                     <Typography variant="body2" textAlign="left">You have 5 questions left to answer. Keep going, you can do it!</Typography>
                 </Box>
@@ -98,7 +98,7 @@ const QuestView = () => {
                                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                                         <Box>
                                             <Typography variant="h6" textAlign="left">{review.title}</Typography>
-                                            <Typography variant="body2" textAlign="left" color="text.secondary">{review.name}</Typography>
+                                            <Typography variant="body1" textAlign="left" color="rgba(255, 255, 255, 0.68)">{review.name}</Typography>
                                         </Box>
                                         <Rating value={review.rating} precision={0.5} readOnly size="small" sx={{ marginY: 1 }} />
                                     </Stack>

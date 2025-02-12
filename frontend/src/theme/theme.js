@@ -1,23 +1,133 @@
 import { createTheme } from "@mui/material/styles";
 
 const NeonTheme = createTheme({
+    typography: {
+        h1: {
+            fontFamily: "\"Space Mono\", monospace",
+            fontSize: "6em", // 96px
+            fontWeight: "bold",
+        },
+        h2: {
+            fontFamily: "\"Space Mono\", monospace",
+            fontSize: "3.75em", // 60px
+            fontWeight: "normal",
+        },
+        h3: {
+            fontFamily: "\"Space Mono\", monospace",
+            fontSize: "3em", // 48px
+            fontWeight: "normal",
+        },
+        h4: {
+            fontFamily: "\"Space Mono\", monospace",
+            fontSize: "2.25em", // 36px
+            fontWeight: "normal",
+        },
+        h5: {
+            fontFamily: "\"Roboto\", sans-serif",
+            fontSize: "1.5em", // 24px
+            fontWeight: "normal",
+        },
+        h6: {
+            fontFamily: "\"Roboto\", sans-serif",
+            fontSize: "1.25em", // 20px
+            fontWeight: "normal",
+        },
+        body2: {
+            fontFamily: "\"Roboto\", sans-serif",
+            fontSize: "1.125em", // 18px
+            fontWeight: "normal",
+        },
+        body1: {
+            fontFamily: "\"Roboto\", sans-serif",
+            fontSize: "1em", // 16px
+            fontWeight: "normal",
+        },
+        button: {
+            fontFamily: "\"Roboto\", sans-serif",
+            fontSize: "1.125em", // 18px
+            fontWeight: "normal",
+        },
+        overline: {
+            fontFamily: "\"Roboto\", sans-serif",
+            fontSize: "0.75em", // 12px
+            fontWeight: "normal",
+        },
+    },
     palette: {
-        primary: {
-            main: "#E15FED",
-        },
-        secondary: {
-            main: "#6EDCD9",
-        },
         background: {
             default: "#121212",
-            paper: "#1E1E1E",
+            paper: "#121212",
         },
         text: {
             primary: "#FFFFFF",
             secondary: "#A9ACFF",
         },
+        primary: {
+            main: 'rgba(248, 169, 255, 1)',
+            light: 'rgba(250, 191, 255, 1)',
+            dark: 'rgba(225, 95, 237, 1)',
+            contrastText: 'rgba(40, 41, 48, 1)',
+        },
+        secondary: {
+            main: 'rgba(169, 172, 255, 1)',
+            light: 'rgba(203, 204, 255, 1)',
+            dark: 'rgba(51, 47, 208, 1)',
+            contrastText: 'rgba(40, 41, 48, 1)',
+        },
+        error: {
+            main: 'rgba(237, 95, 97, 1)',
+            light: 'rgba(255, 149, 151, 1)',
+            dark: 'rgba(221, 73, 112, 1)',
+            contrastText: 'rgba(40, 41, 48, 1)',
+        },
+        warning: {
+            main: 'rgba(250, 234, 72, 1)',
+            light: 'rgba(255, 243, 118, 1)',
+            dark: 'rgba(204, 214, 66, 1)',
+            contrastText: 'rgba(40, 41, 48, 1)',
+        },
+        info: {
+            main: 'rgba(169, 172, 255, 1)',
+            light: 'rgba(203, 204, 255, 1)',
+            dark: 'rgba(51, 47, 208, 1)',
+            contrastText: 'rgba(40, 41, 48, 1)',
+        },
+        success: {
+            main: 'rgba(110, 220, 217, 1)',
+            light: 'rgba(148, 228, 226, 1)',
+            dark: 'rgba(59, 173, 194, 1)',
+            contrastText: 'rgba(40, 41, 48, 1)',
+        }
     },
     components: {
+        MuiRating: {
+            styleOverrides: {
+                root: {
+                    color: 'rgba(250, 234, 72, 1)',
+                    borderColor: 'rgba(250, 234, 72, 1)',
+                },
+                emptyStar: {
+                    color: 'transparent',
+                    '& .MuiSvgIcon-root': {
+                        stroke: 'rgba(250, 234, 72, 1)',
+                    },
+                }
+            }
+        },
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    color: 'rgba(255, 255, 255, 0.68)',
+                    '&.Mui-disabled': {
+                        color: 'gray',
+                    },
+                },
+                indicator: {
+                    color: 'rgba(255, 255, 255, 1)',
+                    boxShadow: "0px 1px 4px 0px var(--pink, #E15FED), 0px 1px 4px 0px var(--pink, #E15FED)",
+                },
+            }
+        },
         MuiButton: {
             styleOverrides: {
                 root: {
@@ -34,53 +144,84 @@ const NeonTheme = createTheme({
                 },
             },
         },
-        MuiTextField: {
+        MuiIconButton:{
             styleOverrides: {
                 root: {
-                    "& .MuiInputBase-root": {
-                        color: "#FFFFFF",
-                        borderRadius: 8,
-                        backgroundColor: "#1E1E1E",
-                        "&:hover": {
-                            boxShadow: "0px 0px 10px #6EDCD9",
-                        },
+                    color: 'rgba(255, 255, 255, 0.68)',
+                    '&:hover': {
+                        color: 'rgba(248, 169, 255, 1)',
                     },
-                    "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#A9ACFF",
+                    '&.Mui-disabled': {
+                        color: 'gray',
+                    },
+                }
+            }
+
+        },
+        MuiInputLabel: {
+            styleOverrides: {
+                root: {
+                    color: 'rgba(255, 255, 255, 0.65)',
+                    '&.Mui-focused': {
+                        color: 'rgba(255, 255, 255, 1)',
                     },
                 },
             },
         },
-        MuiTabs: {
+        MuiTextField: {
             styleOverrides: {
                 root: {
-                    "& .MuiTab-root": {
-                        color: "#FFFFFF",
-                        "&.Mui-selected": {
-                            color: "#A9ACFF",
-                        },
+                    '& fieldset': {
+                        borderColor: 'rgba(255, 255, 255, 0.68)',
                     },
-                    "& .MuiTabs-indicator": {
-                        backgroundColor: "#A9ACFF",
+                    '&:hover fieldset': {
+                        borderColor: 'rgba(255, 255, 255, 0.68)',
+                        boxShadow: "0px 1px 4px 0px var(--pink, #E15FED), 0px 1px 4px 0px var(--pink, #E15FED)",
+
                     },
+                    '&.Mui-focused fieldset': {
+                        borderColor: 'rgba(255, 255, 255, 0.68)',
+                        boxShadow: "0px 1px 4px 0px var(--pink, #E15FED), 0px 1px 4px 0px var(--pink, #E15FED)",
+                    },
+                },
+                input: {
+                    color: 'rgba(255, 255, 255, 1)',
+                    '&::placeholder': {
+                        color: 'rgba(255, 255, 255, 0.65)',
+                    }
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    '& fieldset': {
+                        borderColor: 'rgba(255, 255, 255, 0.68)',
+                    },
+                    '&:hover fieldset': {
+                        borderColor: 'rgba(255, 255, 255, 0.68)',
+                        boxShadow: "0px 1px 4px 0px var(--pink, #E15FED), 0px 1px 4px 0px var(--pink, #E15FED)",
+
+                    },
+                    '&.Mui-focused fieldset': {
+                        borderColor: 'rgba(255, 255, 255, 0.68)',
+                        boxShadow: "0px 1px 4px 0px var(--pink, #E15FED), 0px 1px 4px 0px var(--pink, #E15FED)",
+                    },
+                },
+                input: {
+                    color: 'rgba(255, 255, 255, 1)',
+                    '&::placeholder': {
+                        color: 'rgba(255, 255, 255, 0.65)',
+                    }
                 },
             },
         },
         MuiBox: {
             styleOverrides: {
                 root: {
-                    backgroundColor: "#1E1E1E",
                     borderRadius: 8,
                     boxShadow: "0px 0px 15px #6EDCD9",
-                    padding: "16px",
-                    color: "#FFFFFF",
-                },
-            },
-        },
-        MuiTypography: {
-            styleOverrides: {
-                root: {
-                    color: "#FFFFFF",
+                    padding: "16px"
                 },
             },
         },
