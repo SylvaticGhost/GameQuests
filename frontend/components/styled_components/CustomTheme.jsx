@@ -48,7 +48,6 @@ const theme = createTheme({
             fontFamily: "\"Roboto\", sans-serif",
             fontSize: "1.125em", // 18px
             fontWeight: "normal",
-            textTransform: "none",
         },
         overline: {
             fontFamily: "\"Roboto\", sans-serif",
@@ -95,6 +94,36 @@ const theme = createTheme({
             light: 'rgba(148, 228, 226, 1)',
             dark: 'rgba(59, 173, 194, 1)',
             contrastText: 'rgba(40, 41, 48, 1)',
+        }
+    },
+    components: {
+        MuiIconButton:{
+            styleOverrides: {
+                textTransform: "none",
+                color: 'rgba(255, 255, 255, 0.68)',
+            }
+        },
+        MuiInput: {
+            variants:[
+                {
+                    props: {variant: "outlined"},
+                    style: {
+                        borderColor: 'rgba(255, 255, 255, 0.68)',
+                    }
+                },
+                {
+                    props: {variant: "filled"},
+                    style: {
+                        color: 'rgba(255, 255, 255, 0.68)',
+                    }
+                },
+                {
+                    props: {variant: "standard"},
+                    style: {
+                        color: 'rgba(255, 255, 255, 0.68)',
+                    }
+                },
+            ]
         }
     }
 });
