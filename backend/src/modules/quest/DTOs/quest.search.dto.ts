@@ -13,5 +13,5 @@ export class QuestSearchDto {
 
     @IsOptional()
     @IsUUID()
-    userId?: string;
+    creatorId?: string;
 }
