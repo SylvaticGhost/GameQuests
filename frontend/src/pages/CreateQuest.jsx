@@ -97,7 +97,7 @@ const CreateQuestPage = () => {
     };
 
     return (
-        <Box sx={{ p: 2, bgcolor: "#fff", minHeight: "100vh" }}>
+        <Box sx={{ p: 2, bgcolor: "background.paper", minHeight: "100vh" }}>
             <Typography variant="h4" gutterBottom>
                 Create Quest
             </Typography>

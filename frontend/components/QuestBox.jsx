@@ -2,8 +2,6 @@ import {Box, Button, Typography} from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import {useNavigate} from "react-router-dom";
-
-
 export function QuestBox({ title, questions, people, id }) {
     const navigate = useNavigate();
     const handleCompleteClick = () => {
@@ -18,8 +16,13 @@ export function QuestBox({ title, questions, people, id }) {
                 boxShadow: 3,
                 position: "relative",
                 overflow: "hidden",
-                backgroundColor: "#121212",
+                border: "2px solid #6EDCD9",
+                boxShadow: "0px 0px 15px #6EDCD9",
                 color: "#fff",
+                transition: "0.3s",
+        "&:hover": {
+          boxShadow: "0px 0px 25px #6EDCD9",
+        },
             }}
         >
             <Box
