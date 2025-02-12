@@ -40,11 +40,8 @@ export class ImagesController {
         }),
     )
     async uploadImage(@UploadedFile() file: Express.Multer.File) {
-        if (!file) {
-            throw new HttpException('File is missing', 400);
-        }
-        this.imagesService.upload(file);
-        return { filename: file.originalname };
+        if (!file) throw new HttpException('File is missing', 400);
+        const result = await this.imagesService.upload(file);
     }
 
     @Get(':filename')

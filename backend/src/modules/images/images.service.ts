@@ -1,15 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ImageDocument, Image } from './image.entity';
+import { Result } from 'src/shared/result';
 
 @Injectable()
 export class ImagesService {
     constructor(@InjectModel(Image.name) private imageModel: Model<ImageDocument>) {}
 
-    async upload(file: Express.Multer.File): Promise<Image> {
-        const exists = this.imageModel.exists({ filename: file.originalname });
-        if (exists) throw new ConflictException('image with this name exists');
+    async upload(file: Express.Multer.File): Promise<Result<Image>> {
+        const exists = await this.imageModel.exists({ filename: file.originalname });
+        if (exists) return Result.conflict('Image already exists');
 
         const newImage = new this.imageModel({
             filename: file.originalname,
@@ -17,7 +18,8 @@ export class ImagesService {
             data: file.buffer,
             uploadDate: new Date(),
         });
-        return newImage.save();
+        newImage.save();
+        return Result.success(newImage);
     }
 
     async get(filename: string): Promise<Image> {
