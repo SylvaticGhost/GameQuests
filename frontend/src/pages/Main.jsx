@@ -13,6 +13,7 @@ import MyQuests from "../../components/MyQuests.jsx";
 import {QuestBox} from "../../components/QuestBox.jsx";
 import CreateQuestPage from "./CreateQuest.jsx";
 import GoogleIcon from "@mui/icons-material/Google";
+import Header from "../../components/Header.jsx";
 
 const API_URL = "http://localhost:3001/user";
 
@@ -119,8 +120,6 @@ export default function Main() {
         setSnackbar({ open: true, message: "Logged out successfully", severity: "info" });
     };
 
-    const handleChange = (_, newValue) => setValue(newValue);
-
     const quests = [
         { id: 1, title: "BanterBrush", questions: 10, people: 2 },
         { id: 2, title: "CreativeSpace", questions: 15, people: 5 },
@@ -152,7 +151,6 @@ export default function Main() {
             )}
         </Box>
 
-            {/* Регистрация */}
             <Drawer anchor="right" open={registerOpen} onClose={() => setRegisterOpen(false)}>
                 <Box sx={{ width: 300, p: 2 }}>
                     <TextField label="Email" fullWidth margin="normal" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
@@ -172,7 +170,6 @@ export default function Main() {
                 </Box>
             </Drawer>
 
-            {/* Логин */}
             <Drawer anchor="right" open={loginOpen} onClose={() => setLoginOpen(false)}>
                 <Box sx={{ width: 300, p: 2 }}>
                     <TextField label="Email" fullWidth margin="normal" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
@@ -189,13 +186,7 @@ export default function Main() {
                     </Button>
                 </Box>
             </Drawer>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Tabs value={value} onChange={handleChange}>
-                    <Tab label="EXPLORE" />
-                    <Tab label="My quests" />
-                    <Tab label="Create quest" />
-                </Tabs>
-            </Box>
+            <Header value={values} setValue={setValue}/>
             <TabsPanel value={value} index={0}>
                 <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, mt: 4 }}>
                     {quests.map((quest) => (
