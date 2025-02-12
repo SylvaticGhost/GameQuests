@@ -120,6 +120,8 @@ export default function Main() {
         setSnackbar({ open: true, message: "Logged out successfully", severity: "info" });
     };
 
+    const handleChange = (_, newValue) => setValue(newValue);
+
     const quests = [
         { id: 1, title: "BanterBrush", questions: 10, people: 2 },
         { id: 2, title: "CreativeSpace", questions: 15, people: 5 },
@@ -186,7 +188,13 @@ export default function Main() {
                     </Button>
                 </Box>
             </Drawer>
-            <Header value={values} setValue={setValue}/>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Tabs value={value} onChange={handleChange}>
+                    <Tab label="EXPLORE" />
+                    <Tab label="My quests" />
+                    <Tab label="Create quest" />
+                </Tabs>
+            </Box>
             <TabsPanel value={value} index={0}>
                 <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, mt: 4 }}>
                     {quests.map((quest) => (
