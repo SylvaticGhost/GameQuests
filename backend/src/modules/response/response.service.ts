@@ -16,6 +16,7 @@ import { QuestionCurrentDto } from './DTOs/question.current.dto';
 import { QuestionAnswerCreateDto } from './DTOs/question-answer.create.dto';
 import { QuestionAnswerResultDto } from './DTOs/question-answer.result.dto';
 import { ResponseEnd } from './entities/response-end.entity';
+import { ResponseSearchDto } from './DTOs/response.search.dto';
 
 @Injectable()
 export class ResponseService {
@@ -118,5 +119,9 @@ export class ResponseService {
         await this.responseEndRepository.create(responseEnd);
 
         return responseEnd;
+    }
+
+    async searchResponses(searchDto: ResponseSearchDto): Promise<ResponseEnd[]> {
+        return this.responseEndRepository.search(searchDto);
     }
 }
