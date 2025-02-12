@@ -5,17 +5,16 @@ import {
     Button,
     TextField,
     Typography,
-    Tabs,
-    Tab,
     Drawer,
     Snackbar,
-    Alert
+    Alert, Tab, Tabs
 } from "@mui/material";
 import MyQuests from "../../components/MyQuests.jsx";
-import { QuestBox } from "../../components/QuestBox.jsx";
+import {QuestBox} from "../../components/QuestBox.jsx";
 import CreateQuestPage from "./CreateQuest.jsx";
 
-const API_URL = "http://localhost:4000/user";
+const API_URL = "http://localhost:3001/user";
+
 
 function TabsPanel({ children, value, index }) {
     return (
@@ -27,11 +26,22 @@ function TabsPanel({ children, value, index }) {
 
 export default function Main() {
     const [value, setValue] = useState(0);
+
     const [user, setUser] = useState(null);
-    const [authOpen, setAuthOpen] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [errors, setErrors] = useState({ email: "", password: "" });
+    const [registerOpen, setRegisterOpen] = useState(false);
+    const [loginOpen, setLoginOpen] = useState(false);
+
+    // Состояния для логина
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+
+    // Состояния для регистрации
+    const [registerEmail, setRegisterEmail] = useState("");
+    const [registerPassword, setRegisterPassword] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [birthday, setBirthday] = useState("");
+
+    const [errors, setErrors] = useState({});
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
     useEffect(() => {
@@ -52,36 +62,51 @@ export default function Main() {
         fetchUser();
     }, []);
 
-    const validate = () => {
+    const validate = (data, isLogin) => {
         let valid = true;
-        let newErrors = { email: "", password: "" };
+        let newErrors = {};
 
-        if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+        if (!data.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
             newErrors.email = "Invalid email format";
             valid = false;
         }
-        if (password.length < 6) {
+        if (data.password.length < 6) {
             newErrors.password = "Password must be at least 6 characters";
             valid = false;
         }
-
+        if (!isLogin) {
+            if (!data.nickname) {
+                newErrors.nickname = "Nickname is required";
+                valid = false;
+            }
+            if (!data.birthday.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                newErrors.birthday = "Invalid birthday format (YYYY-MM-DD)";
+                valid = false;
+            }
+        }
         setErrors(newErrors);
         return valid;
     };
 
-    const handleAuth = async (isLogin) => {
-        if (!validate()) return;
+    const handleAuth = async (data, isLogin) => {
+        if (!validate(data, isLogin)) return;
         try {
             const endpoint = isLogin ? "login" : "register";
-            const response = await axios.post(`${API_URL}/${endpoint}`, { email, password });
+            const method = isLogin ? "PUT" : "POST";
+
+            const response = await axios({
+                method,
+                url: `${API_URL}/${endpoint}`,
+                data
+            });
 
             localStorage.setItem("token", response.data.token);
             setUser(response.data.user);
-            setAuthOpen(false);
-            setSnackbar({ open: true, message: isLogin ? "Login successful!" : "Registration successful!", severity: "success" });
+            setRegisterOpen(false);
+            setLoginOpen(false);
+            setSnackbar({ open: true, message: isLogin ? "Login successful" : "Registration successful", severity: "success" });
         } catch (error) {
-            console.error("Authentication failed:", error);
-            setSnackbar({ open: true, message: error.response?.data?.message || "Authentication failed", severity: "error" });
+            console.error("Authentication failed:", error.response?.data || error);
         }
     };
 
@@ -92,7 +117,7 @@ export default function Main() {
     };
 
     const handleChange = (_, newValue) => setValue(newValue);
-    const closeSnackbar = () => setSnackbar({ ...snackbar, open: false });
+
 
     const quests = [
         { id: 1, title: "BanterBrush", questions: 10, people: 2 },
@@ -111,38 +136,31 @@ export default function Main() {
                     </Box>
                 ) : (
                     <Box sx={{ display: "flex", gap: 1 }}>
-                        <Button variant="contained" onClick={() => setAuthOpen(true)}>Sign Up</Button>
-                        <Button variant="contained" onClick={() => setAuthOpen(true)}>Login</Button>
+                        <Button variant="contained" onClick={() => setRegisterOpen(true)}>Sign Up</Button>
+                        <Button variant="contained" onClick={() => setLoginOpen(true)}>Login</Button>
                     </Box>
                 )}
             </Box>
 
-            <Drawer anchor="right" open={authOpen} onClose={() => setAuthOpen(false)}>
+            {/* Регистрация */}
+            <Drawer anchor="right" open={registerOpen} onClose={() => setRegisterOpen(false)}>
                 <Box sx={{ width: 300, p: 2 }}>
-                    <TextField
-                        label="Email"
-                        fullWidth
-                        margin="normal"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        error={!!errors.email}
-                        helperText={errors.email}
-                    />
-                    <TextField
-                        label="Password"
-                        type="password"
-                        fullWidth
-                        margin="normal"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        error={!!errors.password}
-                        helperText={errors.password}
-                    />
-                    <Button variant="contained" fullWidth onClick={() => handleAuth(false)}>Register</Button>
-                    <Button variant="contained" fullWidth onClick={() => handleAuth(true)}>Login</Button>
+                    <TextField label="Email" fullWidth margin="normal" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
+                    <TextField label="Password" type="password" fullWidth margin="normal" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} error={!!errors.password} helperText={errors.password} />
+                    <TextField label="Nickname" fullWidth margin="normal" value={nickname} onChange={(e) => setNickname(e.target.value)} error={!!errors.nickname} helperText={errors.nickname} />
+                    <TextField label="Birthday (YYYY-MM-DD)" fullWidth margin="normal" value={birthday} onChange={(e) => setBirthday(e.target.value)} error={!!errors.birthday} helperText={errors.birthday} />
+                    <Button variant="contained" fullWidth onClick={() => handleAuth({ email: registerEmail, password: registerPassword, nickname, birthday }, false)}>Register</Button>
                 </Box>
             </Drawer>
 
+            {/* Логин */}
+            <Drawer anchor="right" open={loginOpen} onClose={() => setLoginOpen(false)}>
+                <Box sx={{ width: 300, p: 2 }}>
+                    <TextField label="Email" fullWidth margin="normal" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
+                    <TextField label="Password" type="password" fullWidth margin="normal" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} error={!!errors.password} helperText={errors.password} />
+                    <Button variant="contained" fullWidth onClick={() => handleAuth({ email: loginEmail, password: loginPassword }, true)}>Login</Button>
+                </Box>
+            </Drawer>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs value={value} onChange={handleChange}>
                     <Tab label="EXPLORE" />
@@ -163,8 +181,7 @@ export default function Main() {
             <TabsPanel value={value} index={2}>
                 <CreateQuestPage />
             </TabsPanel>
-
-            <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={closeSnackbar}>
+            <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
                 <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
             </Snackbar>
         </Box>
