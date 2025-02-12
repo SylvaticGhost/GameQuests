@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {Box, Typography} from "@mui/material";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 function unlockDate(){
     const date = new Date();
@@ -30,22 +31,23 @@ function AchieveCard(props) {
             width: "25%",
 
             borderRadius: "6px",
-            border: "1px solid #8EB8E1"
+            border: "1px solid rgba(255, 255, 255, 0.65)",
+            backgroundColor: "rgba(40, 41, 48, 1)",
+            '&:hover': {
+                boxShadow: "2px 0px 6px 0px var(--teal, #6EDCD9), -2px 0px 6px 0px var(--teal, #6EDCD9), 0px -2px 6px 0px var(--teal, #6EDCD9), 0px 2px 6px 0px var(--teal, #6EDCD9)",
+            }
     }}>
-        {isUnlocked ? <Box sx={{
-            size: "180px",
-            aspectRatio: "1/1",
-            borderRadius: "4px",
-            background: "#D9D9D9"
-        }}/> :
-            <QuestionMarkIcon sx={{ width: 180, height: 180, color: "rgba(0, 0, 0, 0.54)"}}/>
+        {isUnlocked ? <EmojiEventsIcon
+                sx={{ width: 180, height: 180, color: "rgba(110, 220, 217, 1)"}}/> :
+            <QuestionMarkIcon
+                sx={{ width: 180, height: 180, color: "rgba(110, 220, 217, 1)"}}/>
         }
         <Box>
             {isUnlocked ?
                 <Typography variant="h5" fontWeight="bold">{props.title}</Typography> :
                 <Typography variant="h5" fontWeight="bold">Secret Yet To Uncover</Typography>
             }
-            {isUnlocked && <Typography variant="body2" sx={{color: "rgba(0, 0, 0, 0.54)"}}>
+            {isUnlocked && <Typography variant="body2" sx={{color: "rgba(255, 255, 255, 0.65)"}}>
                 {unlockDate()/*props.date*/}
             </Typography>}
         </Box>
