@@ -29,6 +29,7 @@ const NeonTheme = createTheme({
                         boxShadow: "0px 0px 15px #F8A9FF",
                         backgroundColor: "transparent",
                         border: "2px solid #F8A9FF",
+                        color: "#FFFF"
                     },
                 },
             },
