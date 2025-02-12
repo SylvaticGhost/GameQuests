@@ -43,13 +43,6 @@ const onSubmit = (values, actions) => {
     actions.resetForm();
 };
 
-// doesn't work :(
-const handleCancel = (values, actions) => {
-    actions.resetForm();
-    /*document.getElementById("profile-form").reset();*/
-
-};
-
 
 function MyProfile(){
     const [value, setValue] = useState(0);
@@ -79,6 +72,16 @@ function MyProfile(){
     function handleMouseDownPW(event) {
         event.preventDefault();
     }
+
+
+// doesn't work :(
+    const handleCancel = (actions) => {
+        console.log(formik.values)
+        actions.resetForm();
+        /*document.getElementById("profile-form").reset();*/
+
+    };
+
 
     const formik = useFormik({
         initialValues: {
