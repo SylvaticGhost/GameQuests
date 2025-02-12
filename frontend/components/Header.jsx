@@ -13,14 +13,13 @@ function a11yProps(index) {
 
 
 function Header(props) {
-    const handleChange = (event, newValue) => {
-        props.setValue(newValue);
-    };
-    return <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={props.value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="EXPLORE" {...a11yProps(0)} />
-            <Tab label="My quests" {...a11yProps(1)} />
-            {/*<Tab label="Profile" {...a11yProps(2)} />*/}
+    const handleChange = (_, newValue) => props.setValue(newValue);
+
+    return <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs value={props.value} onChange={handleChange}>
+            <Tab label="EXPLORE" />
+            <Tab label="My quests" />
+            <Tab label="Create quest" />
         </Tabs>
     </Box>
 }

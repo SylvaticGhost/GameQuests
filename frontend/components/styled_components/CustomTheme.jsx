@@ -1,7 +1,6 @@
 import {createTheme, styled} from '@mui/material/styles';
 import Typography from "@mui/material/Typography";
 
-// Or Create your Own theme:
 const theme = createTheme({
     typography: {
         h1: {

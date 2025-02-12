@@ -12,6 +12,7 @@ import {
 import MyQuests from "../../components/MyQuests.jsx";
 import {QuestBox} from "../../components/QuestBox.jsx";
 import CreateQuestPage from "./CreateQuest.jsx";
+import Header from "../../components/Header.jsx";
 
 const API_URL = "http://localhost:3001/user";
 
@@ -31,11 +32,9 @@ export default function Main() {
     const [registerOpen, setRegisterOpen] = useState(false);
     const [loginOpen, setLoginOpen] = useState(false);
 
-    // Состояния для логина
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
 
-    // Состояния для регистрации
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [nickname, setNickname] = useState("");
@@ -116,8 +115,6 @@ export default function Main() {
         setSnackbar({ open: true, message: "Logged out successfully", severity: "info" });
     };
 
-    const handleChange = (_, newValue) => setValue(newValue);
-
 
     const quests = [
         { id: 1, title: "BanterBrush", questions: 10, people: 2 },
@@ -142,7 +139,6 @@ export default function Main() {
                 )}
             </Box>
 
-            {/* Регистрация */}
             <Drawer anchor="right" open={registerOpen} onClose={() => setRegisterOpen(false)}>
                 <Box sx={{ width: 300, p: 2 }}>
                     <TextField label="Email" fullWidth margin="normal" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
@@ -153,7 +149,6 @@ export default function Main() {
                 </Box>
             </Drawer>
 
-            {/* Логин */}
             <Drawer anchor="right" open={loginOpen} onClose={() => setLoginOpen(false)}>
                 <Box sx={{ width: 300, p: 2 }}>
                     <TextField label="Email" fullWidth margin="normal" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
@@ -161,13 +156,7 @@ export default function Main() {
                     <Button variant="contained" fullWidth onClick={() => handleAuth({ email: loginEmail, password: loginPassword }, true)}>Login</Button>
                 </Box>
             </Drawer>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Tabs value={value} onChange={handleChange}>
-                    <Tab label="EXPLORE" />
-                    <Tab label="My quests" />
-                    <Tab label="Create quest" />
-                </Tabs>
-            </Box>
+            <Header value={value} setValue={setValue}></Header>
             <TabsPanel value={value} index={0}>
                 <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, mt: 4 }}>
                     {quests.map((quest) => (
