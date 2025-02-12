@@ -14,6 +14,7 @@ function InputPassword(props) {
                       onChange={props.onChange}
                       label={props.label}
                       placeholder={props.placeholder}
+                      type={props.isPWHidden ? "password" : "text"}
                       endAdornment={<InputAdornment position="end">
                         <IconButton
                             onClick={props.onEyeClick}
