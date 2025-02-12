@@ -130,6 +130,7 @@ dist
 .pnp.*
 
 *./idea
+*./.idea
 *./vscode
 *./.vs
 
