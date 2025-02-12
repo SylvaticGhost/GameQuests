@@ -12,6 +12,7 @@ import {
 import MyQuests from "../../components/MyQuests.jsx";
 import {QuestBox} from "../../components/QuestBox.jsx";
 import CreateQuestPage from "./CreateQuest.jsx";
+import GoogleIcon from "@mui/icons-material/Google";
 
 const API_URL = "http://localhost:3001/user";
 
@@ -31,11 +32,9 @@ export default function Main() {
     const [registerOpen, setRegisterOpen] = useState(false);
     const [loginOpen, setLoginOpen] = useState(false);
 
-    // Состояния для логина
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
 
-    // Состояния для регистрации
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [nickname, setNickname] = useState("");
@@ -44,25 +43,23 @@ export default function Main() {
     const [errors, setErrors] = useState({});
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-    const fetchUser = async () => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            try {
-                const response = await axios.get(`${API_URL}/me`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setUser(response.data);
-            } catch (error) {
-                console.error("Failed to fetch user:", error);
-                localStorage.removeItem("token");
-            }
-        }
-    };
-
     useEffect(() => {
+        const fetchUser = async () => {
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    const response = await axios.get(`${API_URL}/me`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setUser(response.data);
+                } catch (error) {
+                    console.error("Failed to fetch user:", error);
+                    localStorage.removeItem("token");
+                }
+            }
+        };
         fetchUser();
     }, []);
-
 
     const validate = (data, isLogin) => {
         let valid = true;
@@ -102,15 +99,18 @@ export default function Main() {
                 data
             });
 
-            localStorage.setItem("token", response.data.value);
-            await fetchUser();
-
+            localStorage.setItem("token", response.data.token);
+            setUser(response.data.user);
             setRegisterOpen(false);
             setLoginOpen(false);
             setSnackbar({ open: true, message: isLogin ? "Login successful" : "Registration successful", severity: "success" });
         } catch (error) {
             console.error("Authentication failed:", error.response?.data || error);
         }
+    };
+
+    const handleGoogleAuth = () => {
+        window.location.href = `${API_URL}/google`;
     };
 
     const handleLogout = () => {
@@ -121,54 +121,36 @@ export default function Main() {
 
     const handleChange = (_, newValue) => setValue(newValue);
 
-
-    const [quests, setQuests] = useState([]);
-
-    useEffect(() => {
-        const fetchQuests = async () => {
-            try {
-                const response = await fetch("http://localhost:3001/quest/search", {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({}),
-                });
-
-                console.log("Response:", response);
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch quests, status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log("Response JSON:", data);
-
-                setQuests(data);
-            } catch (error) {
-                console.error("Error fetching quests:", error);
-            }
-        };
-
-        fetchQuests();
-    }, []);
+    const quests = [
+        { id: 1, title: "BanterBrush", questions: 10, people: 2 },
+        { id: 2, title: "CreativeSpace", questions: 15, people: 5 },
+        { id: 3, title: "ArtHub", questions: 20, people: 3 }
+    ];
 
     return (
         <Box sx={{ width: "100%" }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
-                <Typography variant="h5">Quests</Typography>
-                {user ? (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Typography>{user.email}</Typography>
-                        <Button variant="outlined" onClick={handleLogout}>Logout</Button>
-                    </Box>
-                ) : (
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                        <Button variant="contained" onClick={() => setRegisterOpen(true)}>Sign Up</Button>
-                        <Button variant="contained" onClick={() => setLoginOpen(true)}>Login</Button>
-                    </Box>
-                )}
-            </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
+            <Typography variant="h5">Quests</Typography>
+            {user ? (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Typography>{user.email}</Typography>
+                    <Button variant="outlined" onClick={handleLogout}>Logout</Button>
+                </Box>
+            ) : (
+                <Box sx={{ display: "flex", gap: 1 }}>
+                    <Button variant="contained" onClick={() => setRegisterOpen(true)}>Sign Up</Button>
+                    <Button variant="contained" onClick={() => setLoginOpen(true)}>Login</Button>
+                    <Button
+                        variant="outlined"
+                        startIcon={<GoogleIcon />}
+                        onClick={handleGoogleAuth}
+                        sx={{ boxShadow: "0px 0px 15px #6EDCD9" }}
+                    >
+                        Continue with Google
+                    </Button>
+                </Box>
+            )}
+        </Box>
 
             {/* Регистрация */}
             <Drawer anchor="right" open={registerOpen} onClose={() => setRegisterOpen(false)}>
@@ -178,6 +160,15 @@ export default function Main() {
                     <TextField label="Nickname" fullWidth margin="normal" value={nickname} onChange={(e) => setNickname(e.target.value)} error={!!errors.nickname} helperText={errors.nickname} />
                     <TextField label="Birthday (YYYY-MM-DD)" fullWidth margin="normal" value={birthday} onChange={(e) => setBirthday(e.target.value)} error={!!errors.birthday} helperText={errors.birthday} />
                     <Button variant="contained" fullWidth onClick={() => handleAuth({ email: registerEmail, password: registerPassword, nickname, birthday }, false)}>Register</Button>
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        startIcon={<GoogleIcon />}
+                        onClick={handleGoogleAuth}
+                        sx={{ mt: 2, boxShadow: "0px 0px 15px #6EDCD9" }}
+                    >
+                        Sign Up with Google
+                    </Button>
                 </Box>
             </Drawer>
 
@@ -187,6 +178,15 @@ export default function Main() {
                     <TextField label="Email" fullWidth margin="normal" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
                     <TextField label="Password" type="password" fullWidth margin="normal" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} error={!!errors.password} helperText={errors.password} />
                     <Button variant="contained" fullWidth onClick={() => handleAuth({ email: loginEmail, password: loginPassword }, true)}>Login</Button>
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        startIcon={<GoogleIcon />}
+                        onClick={handleGoogleAuth}
+                        sx={{ mt: 2, boxShadow: "0px 0px 15px #6EDCD9" }}
+                    >
+                        Login with Google
+                    </Button>
                 </Box>
             </Drawer>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -199,10 +199,9 @@ export default function Main() {
             <TabsPanel value={value} index={0}>
                 <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, mt: 4 }}>
                     {quests.map((quest) => (
-                        <QuestBox key={quest.id} id={quest.id} title={quest.title} questions={quest.questions} time={quest.time} />
+                        <QuestBox key={quest.id} id={quest.id} title={quest.title} questions={quest.questions} people={quest.people} />
                     ))}
                 </Box>
-
             </TabsPanel>
             <TabsPanel value={value} index={1}>
                 <MyQuests />
