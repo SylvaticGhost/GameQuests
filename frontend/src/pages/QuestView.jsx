@@ -11,43 +11,55 @@ import {
     Grid,
     Stack
 } from "@mui/material";
+import {useNavigate, useParams} from "react-router-dom";
+
 
 const QuestView = () => {
+    const navigate = useNavigate();
+    const { id } = useParams();
     const [reviews, setReviews] = useState([
-        {
-            title: "Review title",
-            name: "Name",
-            rating: 4,
-            text: "This quiz was a lot of fun! The questions were not too easy, but not too hard either. The only reason I’m giving it 4 out of 5 is that I wish it had a few more questions. Overall, a great experience!"
-        }
+      {
+        title: "Review title",
+        name: "Name",
+        rating: 4,
+        text: "This quiz was a lot of fun! The questions were not too easy, but not too hard either. The only reason I’m giving it 4 out of 5 is that I wish it had a few more questions. Overall, a great experience!",
+      },
     ]);
     const [newReview, setNewReview] = useState({ title: "", text: "", rating: 0 });
 
     const handleReviewSubmit = () => {
-        setReviews([...reviews, { ...newReview, name: "Name" }]);
-        setNewReview({ title: "", text: "", rating: 0 });
+      setReviews([...reviews, { ...newReview, name: "Name" }]);
+      setNewReview({ title: "", text: "", rating: 0 });
     };
 
     const handleReviewCancel = () => {
-        setNewReview({ title: "", text: "", rating: 0 });
+      setNewReview({ title: "", text: "", rating: 0 });
     };
 
     const handleShare = () => {
-        navigator.clipboard.writeText("Check out this amazing quiz!").then(() => {
-            alert("Link copied to clipboard!");
-        });
+      navigator.clipboard.writeText("Check out this amazing quiz!").then(() => {
+        alert("Link copied to clipboard!");
+      });
+    };
+
+    const handleContinueClick = () => {
+      navigate(`/quest_complete?id=${id}`);
     };
 
     return (
-        <Box sx={{ display: "flex", padding: 3, gap: 3 }}>
-            <Box sx={{ flex: 1 }}>
-                <Box sx={{ marginBottom: 3 }}>
-                    <Typography variant="h3" fontWeight="bold" marginBottom={2} textAlign="left">Title</Typography>
-                    <Typography variant="body1" marginBottom={2} textAlign="left">
-                        Test your knowledge and have fun with this exciting quiz! Featuring a mix of engaging questions, this quiz will challenge you while keeping things entertaining. Whether you're playing solo or with friends, see how well you can score and learn something new along the way!
-                    </Typography>
-                    <Box sx={{ display: "flex", gap: 2 }}>
-                        <Button variant="contained">Continue</Button>
+      <Box sx={{ display: "flex", padding: 3, gap: 3 }}>
+        <Box sx={{ flex: 1 }}>
+          <Box sx={{ marginBottom: 3 }}>
+            <Typography variant="h3" fontWeight="bold" marginBottom={2} textAlign="left">
+              Title
+            </Typography>
+            <Typography variant="body1" marginBottom={2} textAlign="left">
+              Test your knowledge and have fun with this exciting quiz! Featuring a mix of engaging questions, this quiz will challenge you while keeping things entertaining. Whether you're playing solo or with friends, see how well you can score and learn something new along the way!
+            </Typography>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Button variant="contained" onClick={handleContinueClick}>
+                Continue
+              </Button>
                         <Button variant="outlined" onClick={handleShare}>Share</Button>
                     </Box>
                 </Box>
