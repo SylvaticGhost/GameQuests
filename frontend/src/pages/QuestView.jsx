@@ -65,7 +65,7 @@ const QuestView = () => {
                 </Box>
 
                 <Box>
-                    <Typography variant="body1" textAlign="left">Progress</Typography>
+                <Typography variant="body1" textAlign="left">Progress</Typography>
                     <LinearProgress variant="determinate" value={50} sx={{ height: 10, borderRadius: 5, marginBottom: 1 }} />
                     <Typography variant="body2" textAlign="left">You have 5 questions left to answer. Keep going, you can do it!</Typography>
                 </Box>

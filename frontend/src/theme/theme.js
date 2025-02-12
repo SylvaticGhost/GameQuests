@@ -65,6 +65,65 @@ const NeonTheme = createTheme({
                 },
             },
         },
+        MuiBox: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: "#1E1E1E",
+                    borderRadius: 8,
+                    boxShadow: "0px 0px 15px #6EDCD9",
+                    padding: "16px",
+                    color: "#FFFFFF",
+                },
+            },
+        },
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    color: "#FFFFFF",
+                },
+            },
+        },
+        MuiGrid: {
+            styleOverrides: {
+                root: {
+                    "& .MuiGrid-item": {
+                        padding: "16px",
+                    },
+                },
+            },
+        },
+        MuiLinearProgress: {
+            styleOverrides: {
+                root: {
+                    height: 10,
+                    borderRadius: 5,
+                    backgroundColor: "rgba(110, 220, 217, 0.2)",
+                },
+                bar: {
+                    borderRadius: 5,
+                    backgroundColor: "#6EDCD9",
+                    boxShadow: "0px 0px 15px #6EDCD9",
+                },
+            },
+        },
+        MuiPagination: {
+            styleOverrides: {
+                root: {
+                    "& .MuiPaginationItem-root": {
+                        color: "#A9ACFF",
+                        "&.Mui-selected": {
+                            color: "#FFFFFF",
+                            backgroundColor: "#A9ACFF",
+                            boxShadow: "0px 0px 10px #A9ACFF",
+                        },
+                        "&:hover": {
+                            backgroundColor: "rgba(169, 172, 255, 0.1)",
+                            boxShadow: "0px 0px 10px #A9ACFF",
+                        },
+                    },
+                },
+            },
+        },
     },
 });
 
