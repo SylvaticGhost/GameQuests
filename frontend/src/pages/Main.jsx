@@ -122,11 +122,36 @@ export default function Main() {
     const handleChange = (_, newValue) => setValue(newValue);
 
 
-    const quests = [
-        { id: 1, title: "BanterBrush", questions: 10, time: 2 },
-        { id: 2, title: "CreativeSpace", questions: 15, time: 5 },
-        { id: 3, title: "ArtHub", questions: 20, time: 3 }
-    ];
+    const [quests, setQuests] = useState([]);
+
+    useEffect(() => {
+        const fetchQuests = async () => {
+            try {
+                const response = await fetch("http://localhost:3001/quest/search", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({}),
+                });
+
+                console.log("Response:", response);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch quests, status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Response JSON:", data);
+
+                setQuests(data);
+            } catch (error) {
+                console.error("Error fetching quests:", error);
+            }
+        };
+
+        fetchQuests();
+    }, []);
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -177,6 +202,7 @@ export default function Main() {
                         <QuestBox key={quest.id} id={quest.id} title={quest.title} questions={quest.questions} time={quest.time} />
                     ))}
                 </Box>
+
             </TabsPanel>
             <TabsPanel value={value} index={1}>
                 <MyQuests />
