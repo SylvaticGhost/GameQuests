@@ -11,6 +11,10 @@ export class Result<T = null> {
         this.value = value;
     }
 
+    get fact() {
+        return { isSuccess: this.isSuccess, code: this.code, message: this.message };
+    }
+
     static success<T>(value?: T, code: number = 200, message?: string): Result<T> {
         return new Result<T>(true, code, message, value);
     }
