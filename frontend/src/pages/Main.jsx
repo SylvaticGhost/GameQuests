@@ -12,6 +12,7 @@ import {
 import MyQuests from "../../components/MyQuests.jsx";
 import {QuestBox} from "../../components/QuestBox.jsx";
 import CreateQuestPage from "./CreateQuest.jsx";
+import GoogleIcon from "@mui/icons-material/Google";
 
 const API_URL = "http://localhost:3001/user";
 
@@ -31,11 +32,9 @@ export default function Main() {
     const [registerOpen, setRegisterOpen] = useState(false);
     const [loginOpen, setLoginOpen] = useState(false);
 
-    // Состояния для логина
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
 
-    // Состояния для регистрации
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [nickname, setNickname] = useState("");
@@ -110,6 +109,10 @@ export default function Main() {
         }
     };
 
+    const handleGoogleAuth = () => {
+        window.location.href = `${API_URL}/google`;
+    };
+
     const handleLogout = () => {
         localStorage.removeItem("token");
         setUser(null);
@@ -117,7 +120,6 @@ export default function Main() {
     };
 
     const handleChange = (_, newValue) => setValue(newValue);
-
 
     const quests = [
         { id: 1, title: "BanterBrush", questions: 10, people: 2 },
@@ -127,20 +129,28 @@ export default function Main() {
 
     return (
         <Box sx={{ width: "100%" }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
-                <Typography variant="h5">Quests</Typography>
-                {user ? (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Typography>{user.email}</Typography>
-                        <Button variant="outlined" onClick={handleLogout}>Logout</Button>
-                    </Box>
-                ) : (
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                        <Button variant="contained" onClick={() => setRegisterOpen(true)}>Sign Up</Button>
-                        <Button variant="contained" onClick={() => setLoginOpen(true)}>Login</Button>
-                    </Box>
-                )}
-            </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
+            <Typography variant="h5">Quests</Typography>
+            {user ? (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Typography>{user.email}</Typography>
+                    <Button variant="outlined" onClick={handleLogout}>Logout</Button>
+                </Box>
+            ) : (
+                <Box sx={{ display: "flex", gap: 1 }}>
+                    <Button variant="contained" onClick={() => setRegisterOpen(true)}>Sign Up</Button>
+                    <Button variant="contained" onClick={() => setLoginOpen(true)}>Login</Button>
+                    <Button
+                        variant="outlined"
+                        startIcon={<GoogleIcon />}
+                        onClick={handleGoogleAuth}
+                        sx={{ boxShadow: "0px 0px 15px #6EDCD9" }}
+                    >
+                        Continue with Google
+                    </Button>
+                </Box>
+            )}
+        </Box>
 
             {/* Регистрация */}
             <Drawer anchor="right" open={registerOpen} onClose={() => setRegisterOpen(false)}>
@@ -150,6 +160,15 @@ export default function Main() {
                     <TextField label="Nickname" fullWidth margin="normal" value={nickname} onChange={(e) => setNickname(e.target.value)} error={!!errors.nickname} helperText={errors.nickname} />
                     <TextField label="Birthday (YYYY-MM-DD)" fullWidth margin="normal" value={birthday} onChange={(e) => setBirthday(e.target.value)} error={!!errors.birthday} helperText={errors.birthday} />
                     <Button variant="contained" fullWidth onClick={() => handleAuth({ email: registerEmail, password: registerPassword, nickname, birthday }, false)}>Register</Button>
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        startIcon={<GoogleIcon />}
+                        onClick={handleGoogleAuth}
+                        sx={{ mt: 2, boxShadow: "0px 0px 15px #6EDCD9" }}
+                    >
+                        Sign Up with Google
+                    </Button>
                 </Box>
             </Drawer>
 
@@ -159,6 +178,15 @@ export default function Main() {
                     <TextField label="Email" fullWidth margin="normal" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} error={!!errors.email} helperText={errors.email} />
                     <TextField label="Password" type="password" fullWidth margin="normal" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} error={!!errors.password} helperText={errors.password} />
                     <Button variant="contained" fullWidth onClick={() => handleAuth({ email: loginEmail, password: loginPassword }, true)}>Login</Button>
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        startIcon={<GoogleIcon />}
+                        onClick={handleGoogleAuth}
+                        sx={{ mt: 2, boxShadow: "0px 0px 15px #6EDCD9" }}
+                    >
+                        Login with Google
+                    </Button>
                 </Box>
             </Drawer>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
