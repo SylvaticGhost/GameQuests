@@ -8,7 +8,11 @@ import {
     Grid,
     Tabs,
     Tab,
+    IconButton,
+    Checkbox,
+    FormControlLabel,
 } from "@mui/material";
+import { Delete } from "@mui/icons-material";
 import PaginationComponent from "../../components/PaginationComponent";
 import TestQuestion from "../../components/TestQuestion";
 import TextFieldQuestion from "../../components/TextFieldQuestion";
@@ -26,36 +30,63 @@ const CreateQuestPage = () => {
     const inputRef = useRef(null);
 
     const handleQuestionTypeChange = (index, type) => {
-        setQuestions((prev) => {
-            const newQuestions = [...prev];
-            newQuestions[index] = { type, question: "", answers: ["", ""], correctIndex: 0 };
-            return newQuestions;
-        });
+        const newQuestions = [...questions];
+        newQuestions[index] = { type, question: "", answers: ["", ""], correctAnswers: [] };
+        setQuestions(newQuestions);
     };
 
     const handleQuestionChange = (index, value) => {
-        setQuestions((prev) => {
-            const newQuestions = [...prev];
-            newQuestions[index].question = value;
-            return newQuestions;
-        });
+        const newQuestions = [...questions];
+        newQuestions[index].question = value;
+        setQuestions(newQuestions);
+    };
+
+    const handleAnswerChange = (qIndex, aIndex, value) => {
+        const newQuestions = [...questions];
+        newQuestions[qIndex].answers[aIndex] = value;
+        setQuestions(newQuestions);
+    };
+
+    const handleCorrectAnswerChange = (qIndex, value) => {
+        const newQuestions = [...questions];
+        newQuestions[qIndex].correctIndex = value;
+        setQuestions(newQuestions);
+    };
+
+    const handleAddAnswer = (qIndex) => {
+        const newQuestions = [...questions];
+        if (newQuestions[qIndex].answers.length < 10) {
+            newQuestions[qIndex].answers.push("");
+            setQuestions(newQuestions);
+        } else {
+            alert("Each question can have a maximum of 10 answers.");
+        }
+    };
+
+    const handleDeleteAnswer = (qIndex, aIndex) => {
+        const newQuestions = [...questions];
+        if (newQuestions[qIndex].answers.length > 2) {
+            newQuestions[qIndex].answers.splice(aIndex, 1);
+            setQuestions(newQuestions);
+        } else {
+            alert("Each question must have at least 2 answers.");
+        }
     };
 
     const handleAddQuestion = () => {
-        setQuestions((prev) => [...prev, { type: "test", question: "", answers: ["", ""], correctIndex: 0 }]);
-        setCurrentPage((prev) => prev + 1);
+        setQuestions([...questions, { type: "test", question: "", answers: ["", ""], correctIndex: 0 }]);
+        setCurrentPage(questions.length + 1);
     };
 
     const handleDeleteQuestion = (index) => {
-        setQuestions((prev) => {
-            if (prev.length > 1) {
-                const newQuestions = [...prev];
-                newQuestions.splice(index, 1);
-                return newQuestions;
-            }
-            return prev;
-        });
-        setCurrentPage((prev) => Math.max(1, prev - 1));
+        const newQuestions = [...questions];
+        if (newQuestions.length > 1) {
+            newQuestions.splice(index, 1);
+            setQuestions(newQuestions);
+            setCurrentPage(Math.max(1, currentPage - 1));
+        } else {
+            alert("You must have at least 1 question in your quest.");
+        }
     };
 
     const handleCoverImageChange = (event) => {
@@ -84,17 +115,47 @@ const CreateQuestPage = () => {
             return;
         }
 
+        const formattedTime = new Date(timeLimit * 60 * 1000).toISOString().substr(11, 8);
+
         const questData = {
-            title: questName,
+            name: questName,
             description,
-            timeLimit,
-            questions,
-            coverImage,
+            time: formattedTime,
+            realTime: false,
+            startDate: new Date().toISOString(),
+            endDate: new Date(Date.now() + timeLimit * 60000).toISOString(),
+            tasks: questions.map((q, index) => {
+                let task = {
+                    number: index + 1,
+                    text: q.question,
+                };
+
+                if (q.type === "test") {
+                    task.input_test = {
+                        answers: q.answers,
+                        correctIndex: q.correctIndex,
+                    };
+                } else if (q.type === "text") {
+                    task.input_text = {
+                        answer: q.question,
+                    };
+                } else if (q.type === "photo") {
+                    task.input_image_box = {
+                        image: q.question,
+                    };
+                }
+
+                return task;
+            }),
         };
+
+        if (coverImage) {
+            questData.coverImage = coverImage;
+        }
 
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post("http://localhost:4000/quest", questData, {
+            const response = await axios.post("http://localhost:3001/quest", questData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -108,6 +169,11 @@ const CreateQuestPage = () => {
             alert("Failed to create quest. Please try again.");
         }
     };
+
+
+
+
+    const currentQuestion = questions[currentPage - 1];
 
     return (
         <Box sx={{ p: 2, bgcolor: "background.paper", minHeight: "100vh" }}>
@@ -175,7 +241,7 @@ const CreateQuestPage = () => {
 
                 <Grid item xs={12} md={8}>
                     <Tabs
-                        value={questions[currentPage - 1]?.type || "test"}
+                        value={currentQuestion.type}
                         onChange={(e, value) => handleQuestionTypeChange(currentPage - 1, value)}
                         sx={{ mb: 4 }}
                     >
@@ -184,12 +250,17 @@ const CreateQuestPage = () => {
                         <Tab label="Photo Search" value="photo" />
                     </Tabs>
 
-                    {questions[currentPage - 1]?.type === "test" && (
+                    {currentQuestion.type === "test" && (
                         <TestQuestion
-                            question={questions[currentPage - 1]?.question}
-                            answers={questions[currentPage - 1]?.answers}
-                            correctIndex={questions[currentPage - 1]?.correctIndex}
+                            question={currentQuestion.question}
+                            answers={currentQuestion.answers}
+                            correctIndex={currentQuestion.correctIndex}
                             onQuestionChange={(value) => handleQuestionChange(currentPage - 1, value)}
+                            onAnswerChange={(aIndex, value) => handleAnswerChange(currentPage - 1, aIndex, value)}
+                            onCorrectAnswerChange={(value) => handleCorrectAnswerChange(currentPage - 1, value)}
+                            onAddAnswer={() => handleAddAnswer(currentPage - 1)}
+                            onDeleteAnswer={(aIndex) => handleDeleteAnswer(currentPage - 1, aIndex)}
+                            inputRef={inputRef}
                         />
                     )}
 

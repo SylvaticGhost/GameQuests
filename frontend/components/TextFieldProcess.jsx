@@ -89,7 +89,9 @@ const TextFieldProcess = ({ questId, currentQuestionIndex, setCurrentQuestionInd
         onClick={handleNextQuestion}
         disabled={typedAnswer.trim() === ""}
         fullWidth
-        sx={{ mt: 2 }}
+        sx={{ mt: 2,
+        backgroundColor: 'orange'
+      }}
       >
         Next
       </Button>

@@ -44,23 +44,25 @@ export default function Main() {
     const [errors, setErrors] = useState({});
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const token = localStorage.getItem("token");
-            if (token) {
-                try {
-                    const response = await axios.get(`${API_URL}/me`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    setUser(response.data);
-                } catch (error) {
-                    console.error("Failed to fetch user:", error);
-                    localStorage.removeItem("token");
-                }
+    const fetchUser = async () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const response = await axios.get(`${API_URL}/me`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setUser(response.data);
+            } catch (error) {
+                console.error("Failed to fetch user:", error);
+                localStorage.removeItem("token");
             }
-        };
+        }
+    };
+
+    useEffect(() => {
         fetchUser();
     }, []);
+
 
     const validate = (data, isLogin) => {
         let valid = true;
@@ -100,8 +102,9 @@ export default function Main() {
                 data
             });
 
-            localStorage.setItem("token", response.data.token);
-            setUser(response.data.user);
+            localStorage.setItem("token", response.data.value);
+            await fetchUser();
+
             setRegisterOpen(false);
             setLoginOpen(false);
             setSnackbar({ open: true, message: isLogin ? "Login successful" : "Registration successful", severity: "success" });
@@ -120,9 +123,9 @@ export default function Main() {
 
 
     const quests = [
-        { id: 1, title: "BanterBrush", questions: 10, people: 2 },
-        { id: 2, title: "CreativeSpace", questions: 15, people: 5 },
-        { id: 3, title: "ArtHub", questions: 20, people: 3 }
+        { id: 1, title: "BanterBrush", questions: 10, time: 2 },
+        { id: 2, title: "CreativeSpace", questions: 15, time: 5 },
+        { id: 3, title: "ArtHub", questions: 20, time: 3 }
     ];
 
     return (
@@ -171,7 +174,7 @@ export default function Main() {
             <TabsPanel value={value} index={0}>
                 <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, mt: 4 }}>
                     {quests.map((quest) => (
-                        <QuestBox key={quest.id} id={quest.id} title={quest.title} questions={quest.questions} people={quest.people} />
+                        <QuestBox key={quest.id} id={quest.id} title={quest.title} questions={quest.questions} time={quest.time} />
                     ))}
                 </Box>
             </TabsPanel>
