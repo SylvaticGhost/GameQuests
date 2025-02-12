@@ -84,13 +84,7 @@ const TextFieldProcess = ({ questId, currentQuestionIndex, setCurrentQuestionInd
       />
 
       {/* Submit Button */}
-      <Button
-        variant="contained"
-        onClick={handleNextQuestion}
-        disabled={typedAnswer.trim() === ""}
-        fullWidth
-        sx={{ mt: 2 }}
-      >
+     <Button variant="contained" sx={{ mt: 4 }} onClick={handleSubmit}>
         Next
       </Button>
     </Container>

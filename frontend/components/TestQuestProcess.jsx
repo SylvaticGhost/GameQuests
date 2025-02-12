@@ -143,13 +143,7 @@ const TestQuestProcess = ({ questId, currentQuestionIndex, setCurrentQuestionInd
       />
 
       {/* Submit Button */}
-      <Button
-        variant="contained"
-        onClick={handleNextQuestion}
-        disabled={selectedAnswers.length === 0}
-        fullWidth
-        sx={{ mt: 2 }}
-      >
+       <Button variant="contained" sx={{ mt: 4 }} onClick={handleSubmit}>
         Next
       </Button>
     </Container>
