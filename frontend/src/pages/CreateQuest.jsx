@@ -22,6 +22,7 @@ const CreateQuestPage = () => {
         { type: "test", question: "", answers: ["", ""], correctIndex: 0 },
     ]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [coverImage, setCoverImage] = useState(null);
     const inputRef = useRef(null);
 
     const handleQuestionTypeChange = (index, type) => {
@@ -57,6 +58,17 @@ const CreateQuestPage = () => {
         setCurrentPage((prev) => Math.max(1, prev - 1));
     };
 
+    const handleCoverImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setCoverImage(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handleSubmit = async () => {
         if (!questName.trim()) {
             alert("Quest name is required");
@@ -77,6 +89,7 @@ const CreateQuestPage = () => {
             description,
             timeLimit,
             questions,
+            coverImage,
         };
 
         try {
@@ -104,6 +117,35 @@ const CreateQuestPage = () => {
 
             <Grid container spacing={4}>
                 <Grid item xs={12} md={4}>
+                    <Box sx={{ mb: 2 }}>
+                        {coverImage ? (
+                            <Box
+                                component="img"
+                                src={coverImage}
+                                alt="Cover"
+                                sx={{
+                                    width: "100%",
+                                    height: "auto",
+                                    borderRadius: 2,
+                                    boxShadow: "0px 0px 15px #6EDCD9",
+                                }}
+                            />
+                        ) : (
+                            <Button
+                                variant="outlined"
+                                component="label"
+                                sx={{ width: "100%", height: 200, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 2, boxShadow: "0px 0px 15px #6EDCD9" }}
+                            >
+                                Upload Cover Image
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    hidden
+                                    onChange={handleCoverImageChange}
+                                />
+                            </Button>
+                        )}
+                    </Box>
                     <TextField
                         fullWidth
                         label="Quest Name"
@@ -126,7 +168,7 @@ const CreateQuestPage = () => {
                         onChange={(e) => setTimeLimit(Number(e.target.value))}
                         sx={{ mb: 2 }}
                     />
-                    <Button variant="outlined" onClick={handleAddQuestion} sx={{ mt: 2 }}>
+                     <Button variant="outlined" onClick={handleAddQuestion} sx={{ mt: 2 }}>
                         Add Question
                     </Button>
                 </Grid>
