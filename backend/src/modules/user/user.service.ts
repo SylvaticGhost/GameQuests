@@ -20,8 +20,8 @@ export class UserService {
 
     async create(creatDto: UserCreateDto) {
         if (await this.userExists(creatDto.email)) return Result.badRequest('User already exists');
-
         const user = User.create(creatDto);
+        await this.userRepository.create(user);
         return user.asDto;
     }
 

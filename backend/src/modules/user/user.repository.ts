@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserAuth, UserAuthDocument } from './auth-user.entity';
 import { UserDef, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
@@ -65,6 +65,7 @@ export class UserRepository {
 
     private async mapAuth(user: User): Promise<User> {
         const auth = await this.userAuthModel.findOne({ id: user.id });
+        if (!auth) throw new InternalServerErrorException('User auth not found');
         user.attachAuth(auth);
         return user;
     }
