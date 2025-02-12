@@ -47,7 +47,7 @@ export function QuestBox({ title, questions, people, id }) {
             <Typography variant="body2">{questions} minutes</Typography>
           </Box>
                     <Button variant="contained" size="small" onClick={handleCompleteClick}>
-                        Complete
+                        View quest
                     </Button>
                 </Box>
             </Box>
