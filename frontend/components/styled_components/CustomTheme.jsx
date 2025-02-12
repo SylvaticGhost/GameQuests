@@ -130,8 +130,10 @@ const theme = createTheme({
                     props: {variant: 'outlined'},
                     style: {
                         textTransform: 'none',
+                        color: 'rgba(255, 255, 255, 0.68)',
                         borderColor: 'rgba(255, 255, 255, 0.68)',
                         '&:hover': {
+                            color: 'rgba(248, 169, 255, 1)',
                             borderColor: 'rgba(255, 255, 255, 1)',
                             boxShadow: "0px 1px 4px 0px var(--pink, #E15FED), 0px -1px 4px 0px var(--pink, #E15FED), 0px -1px 4px 0px var(--pink, #E15FED), 0px 1px 4px 0px var(--pink, #E15FED)",
 
