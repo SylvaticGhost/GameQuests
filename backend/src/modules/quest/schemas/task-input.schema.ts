@@ -45,6 +45,9 @@ export class TaskImageBoxDocument extends Document {
     @Prop({ required: true })
     yBoxes: number;
 
+    @Prop({ required: true })
+    image: string;
+
     @Prop({ required: true, type: [TestVariantSchema] })
     answer: TestVariantDocument[];
 }

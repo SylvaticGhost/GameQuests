@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserAuth, UserAuthDocument } from './auth-user.entity';
 import { UserDef, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
@@ -36,9 +36,17 @@ export class UserRepository {
     }
 
     async create(user: User): Promise<User> {
-        await this.userModel.create(user);
+        await this.save(user);
         await this.userAuthModel.create(user.auth);
         return user;
+    }
+
+    async save(user: User) {
+        return this.userModel.create(user);
+    }
+
+    async setAvatar(id: string, url: string) {
+        await this.userModel.findOneAndUpdate({ id }, { avatar: url });
     }
 
     private async userExists(param): Promise<boolean> {
@@ -57,6 +65,7 @@ export class UserRepository {
 
     private async mapAuth(user: User): Promise<User> {
         const auth = await this.userAuthModel.findOne({ id: user.id });
+        if (!auth) throw new InternalServerErrorException('User auth not found');
         user.attachAuth(auth);
         return user;
     }

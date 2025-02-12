@@ -18,14 +18,24 @@ export class User {
 
     birthday: Date;
 
+    avatar?: string;
+
     private password?: HashedPassword;
 
-    constructor(id: string, email: string, username: string, created_at: Date, birthday: Date) {
+    constructor(
+        id: string,
+        email: string,
+        username: string,
+        created_at: Date,
+        birthday: Date,
+        avatar?: string,
+    ) {
         this.id = id;
         this.email = email;
         this.nickname = username;
         this.created_at = created_at;
         this.birthday = birthday;
+        this.avatar = avatar;
     }
 
     public static create(dto: UserCreateDto) {
@@ -38,6 +48,11 @@ export class User {
         user.attachPassword(password);
 
         return user;
+    }
+
+    public static createWithGoogle(user: any) {
+        const id = uuidv4();
+        return new User(id, user.email, user.name, new Date(), null, user.picture);
     }
 
     public static fromMongo(userDef: UserDef) {

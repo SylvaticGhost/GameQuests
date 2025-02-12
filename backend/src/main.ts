@@ -25,6 +25,13 @@ async function bootstrap() {
 
     app.useGlobalInterceptors(new ResultInterceptor(new Reflector()));
 
+    app.enableCors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        allowedHeaders: 'Content-Type, Authorization',
+    });
+
     const config = new DocumentBuilder()
         .setTitle('API Documentation')
         .setDescription('The API description')

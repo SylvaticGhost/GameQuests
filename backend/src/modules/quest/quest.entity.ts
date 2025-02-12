@@ -3,8 +3,9 @@ import { QuestCreateDto } from './DTOs/quest.create.dto';
 import { QuestDocument } from './schemas/quest.schema';
 import { Task, TaskWithoutAnswer } from './task.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { Response } from '../response/entities/response.entity';
 
-export interface QuestInfo {
+export type QuestInfo = {
     id: string;
     name: string;
     description?: string;
@@ -12,11 +13,13 @@ export interface QuestInfo {
     realTime: boolean;
     startDate?: Date;
     endDate?: Date;
-}
+};
 
 export interface QuestWithoutAnswers extends QuestInfo {
     tasks: TaskWithoutAnswer[];
 }
+
+const timeErrorInSeconds = 1000;
 
 export class Quest implements QuestInfo {
     id: string;
@@ -120,5 +123,26 @@ export class Quest implements QuestInfo {
             startDate: this.startDate,
             endDate: this.endDate,
         } as QuestInfo;
+    }
+
+    checkDeadline() {
+        if (this.endDate && this.endDate.getTime() < Date.now() + timeErrorInSeconds * 1000) {
+            throw new BadRequestException('Quest has ended');
+        }
+    }
+
+    get timeInSecond() {
+        if (!this.time) return -1;
+        const time = this.time.split(':');
+        return +time[0] * 3600 + +time[1] * 60 + +time[2];
+    }
+
+    checkTimeLimit(response: Response) {
+        if (this.time) {
+            const responseTime = response.startTime.getTime() - new Date().getTime();
+            if (responseTime > (this.timeInSecond + timeErrorInSeconds) * 1000) {
+                throw new BadRequestException('Time limit exceeded');
+            }
+        }
     }
 }

@@ -1,13 +1,11 @@
 import {Box, Button, Typography} from "@mui/material";
-import PeopleIcon from "@mui/icons-material/People";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import {useNavigate} from "react-router-dom";
-
-
 export function QuestBox({ title, questions, people, id }) {
     const navigate = useNavigate();
     const handleCompleteClick = () => {
-        navigate(`/complete-quest?id=${id}`);
+        navigate(`/quest?id=${id}`);
     };
     return (
         <Box
@@ -18,8 +16,13 @@ export function QuestBox({ title, questions, people, id }) {
                 boxShadow: 3,
                 position: "relative",
                 overflow: "hidden",
-                backgroundColor: "#121212",
+                border: "2px solid #6EDCD9",
+                boxShadow: "0px 0px 15px #6EDCD9",
                 color: "#fff",
+                transition: "0.3s",
+        "&:hover": {
+          boxShadow: "0px 0px 25px #6EDCD9",
+        },
             }}
         >
             <Box
@@ -35,14 +38,14 @@ export function QuestBox({ title, questions, people, id }) {
                     {title}
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 1 }}>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <PeopleIcon sx={{ mr: 0.5 }} />
-                        <Typography variant="body2">{people} People</Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <HelpOutlineIcon sx={{ mr: 0.5 }} />
-                        <Typography variant="body2">{questions} Questions</Typography>
-                    </Box>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+            <AssignmentIcon sx={{ mr: 0.5 }} />
+            <Typography variant="body2">{people} Tasks</Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <AccessTimeIcon sx={{ mr: 0.5 }} />
+            <Typography variant="body2">{questions} minutes</Typography>
+          </Box>
                     <Button variant="contained" size="small" onClick={handleCompleteClick}>
                         Complete
                     </Button>

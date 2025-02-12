@@ -58,7 +58,7 @@ const TextFieldProcess = ({ questId, currentQuestionIndex, setCurrentQuestionInd
 
       {/* Question Text */}
       <Box sx={{ p: 2, bgcolor: "#f5f5f5", borderRadius: 2, mb: 3 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" gutterBottom sx={{ bgcolor: "rgba(110, 220, 217, 0.2)", p: 1, borderRadius: 1, color: "#000000" }}>
           {currentQuestion.text}
         </Typography>
       </Box>

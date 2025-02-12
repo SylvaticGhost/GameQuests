@@ -1,30 +1,24 @@
 import { useState } from 'react';
-import RegisterForm from './pages/RegisterForm';
-import CreateQuest from './pages/CreateQuest';
 import './App.css';
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import NeonTheme from "./theme/theme.js";
 import Main from "./pages/Main.jsx";
-import {BrowserRouter} from "react-router-dom";
-import MyHistory from "./pages/MyHistory.jsx";
-import MyProfile from "./pages/MyProfile.jsx";
-import QuestCard from "../components/QuestCard.jsx";
-import Achievements from "./pages/Achievements.jsx";
-import {ThemeProvider} from "@mui/material";
-import theme from "../components/styled_components/CustomTheme.jsx";
-
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import QuestView from "./pages/QuestView.jsx";
+import QuestProcess from "./pages/QuestProcess.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-        <BrowserRouter>
-            <ThemeProvider theme={theme}>
-            {/*<Main/>
-             <CreateQuest />*/}
-            <MyProfile/>
-            </ThemeProvider>
-        </BrowserRouter>
-    </>
+    <ThemeProvider theme={NeonTheme}>
+            <CssBaseline />
+      <Router>
+          <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="/quest" element={<QuestView />} />
+              <Route path="/quest_complete" element={<QuestProcess />} />
+          </Routes>
+      </Router>
+      </ThemeProvider>
   );
 }
 

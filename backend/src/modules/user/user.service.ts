@@ -20,8 +20,8 @@ export class UserService {
 
     async create(creatDto: UserCreateDto) {
         if (await this.userExists(creatDto.email)) return Result.badRequest('User already exists');
-
         const user = User.create(creatDto);
+        await this.userRepository.create(user);
         return user.asDto;
     }
 
@@ -42,6 +42,24 @@ export class UserService {
         return Result.success(jwt);
     }
 
+    async loginWithGoogle(user) {
+        const existedUser = await this.userRepository.findByEmail(user.email, GetAuth.NotInclude);
+
+        if (!existedUser) {
+            await this.registerWithGoogle(user);
+            return this.loginWithGoogle(user);
+        }
+
+        const jwt = this.generateJwtToken(existedUser.payload);
+        return jwt;
+    }
+
+    private async registerWithGoogle(user: any) {
+        console.info(user);
+        const createdUser = User.createWithGoogle(user);
+        await this.userRepository.save(createdUser);
+    }
+
     async userExists(email: string): Promise<boolean> {
         return this.userRepository.userExistsByEmail(email);
     }
@@ -58,6 +76,10 @@ export class UserService {
         await this.cacheManager.set(userId, user.asDto, 60);
 
         return user.asDto;
+    }
+
+    async setAvatar(userId: string, url: string) {
+        return this.userRepository.setAvatar(userId, url);
     }
 
     private generateJwtToken(userPayload: UserPayloadDto) {

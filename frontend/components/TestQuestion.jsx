@@ -7,9 +7,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Typography,
 } from "@mui/material";
-import { Add, Delete, Edit, Image, Videocam } from "@mui/icons-material";
+import { Add, Delete, Image, Videocam, Link } from "@mui/icons-material";
 
 const TestQuestion = ({
   question,
@@ -24,6 +23,8 @@ const TestQuestion = ({
 }) => {
   const [questionMedia, setQuestionMedia] = useState({ type: null, url: null });
   const [answerImages, setAnswerImages] = useState(Array(answers.length).fill(null));
+  const [youtubeLink, setYoutubeLink] = useState("");
+  const [showLinkField, setShowLinkField] = useState(false);
 
   const handleQuestionMediaUpload = (event) => {
     const file = event.target.files[0];
@@ -59,6 +60,15 @@ const TestQuestion = ({
     setAnswerImages(newAnswerImages);
   };
 
+  const handleAddYoutubeLink = () => {
+    setShowLinkField(true);
+  };
+
+  const handleDeleteYoutubeLink = () => {
+    setYoutubeLink("");
+    setShowLinkField(false);
+  };
+
   return (
     <Box>
       {/* Question Input with Image/Video Upload */}
@@ -76,15 +86,14 @@ const TestQuestion = ({
           sx={{ flex: 1, mr: 1, input: { color: "#000" } }}
           inputRef={inputRef}
         />
-        <IconButton color="inherit" onClick={() => inputRef.current.focus()}>
-          <Edit sx={{ color: "#000" }} />
+        <IconButton color="primary" onClick={handleAddYoutubeLink}>
+          <Link />
         </IconButton>
       </Box>
 
       {/* Display Question Media with Delete Button */}
       {questionMedia.url && (
         <Box sx={{ mb: 2, position: "relative", display: "inline-block" }}>
-          <Typography variant="body2">Question Media:</Typography>
           {questionMedia.type === "image" ? (
             <img
               src={questionMedia.url}
@@ -107,6 +116,35 @@ const TestQuestion = ({
         </Box>
       )}
 
+      {/* YouTube Link Input */}
+      {showLinkField && (
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <TextField
+            fullWidth
+            label="YouTube Video Link"
+            value={youtubeLink}
+            onChange={(e) => setYoutubeLink(e.target.value)}
+            placeholder="https://www.youtube.com/watch?v=example"
+          />
+          <IconButton onClick={handleDeleteYoutubeLink}>
+            <Delete sx={{ color: "#f00" }} />
+          </IconButton>
+        </Box>
+      )}
+          {/* Show YouTube Link */}
+          {youtubeLink && (
+        <Box sx={{ mt: 1, mb: 3 }}>
+          <a
+            href={youtubeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#1e88e5", textDecoration: "none", fontWeight: "bold" }}
+          >
+            Open YouTube Video
+          </a>
+        </Box>
+      )}
+
       {/* Answer Inputs with Image Upload */}
       {answers.map((answer, index) => (
         <Box key={index} sx={{ display: "flex", alignItems: "center", mb: 2 }}>
@@ -126,7 +164,6 @@ const TestQuestion = ({
             />
           </RadioGroup>
 
-          {/* Show Image or Text Input Based on Selection */}
           {answerImages[index] ? (
             <Box sx={{ position: "relative", display: "inline-block" }}>
               <img
@@ -159,12 +196,7 @@ const TestQuestion = ({
       ))}
 
       {/* Add Answer Button */}
-      <Button
-        variant="outlined"
-        startIcon={<Add sx={{ color: "#000" }} />}
-        onClick={onAddAnswer}
-        sx={{ mb: 2, color: "#000", borderColor: "#000" }}
-      >
+      <Button variant="outlined" onClick={onAddAnswer} sx={{ mt: 2 }}>
         Add Answer
       </Button>
     </Box>
@@ -172,6 +204,7 @@ const TestQuestion = ({
 };
 
 export default TestQuestion;
+
 
 
 
