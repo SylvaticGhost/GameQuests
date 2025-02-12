@@ -1,6 +1,6 @@
 import {Box, Button, Typography} from "@mui/material";
-import PeopleIcon from "@mui/icons-material/People";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import {useNavigate} from "react-router-dom";
 export function QuestBox({ title, questions, people, id }) {
     const navigate = useNavigate();
@@ -38,14 +38,14 @@ export function QuestBox({ title, questions, people, id }) {
                     {title}
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 1 }}>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <PeopleIcon sx={{ mr: 0.5 }} />
-                        <Typography variant="body2">{people} Tasks</Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <HelpOutlineIcon sx={{ mr: 0.5 }} />
-                        <Typography variant="body2">{questions} Time</Typography>
-                    </Box>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+            <AssignmentIcon sx={{ mr: 0.5 }} />
+            <Typography variant="body2">{people} Tasks</Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <AccessTimeIcon sx={{ mr: 0.5 }} />
+            <Typography variant="body2">{questions} minutes</Typography>
+          </Box>
                     <Button variant="contained" size="small" onClick={handleCompleteClick}>
                         Complete
                     </Button>
