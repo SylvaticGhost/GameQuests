@@ -196,12 +196,7 @@ const TestQuestion = ({
       ))}
 
       {/* Add Answer Button */}
-      <Button
-        variant="outlined"
-        startIcon={<Add sx={{ color: "#000" }} />}
-        onClick={onAddAnswer}
-        sx={{ mb: 2, color: "#000", borderColor: "#000" }}
-      >
+      <Button variant="outlined" onClick={onAddAnswer} sx={{ mt: 2 }}>
         Add Answer
       </Button>
     </Box>
