@@ -5,7 +5,7 @@ import { Task, TaskWithoutAnswer } from './task.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from '../response/entities/response.entity';
 
-export interface QuestInfo {
+export type QuestInfo = {
     id: string;
     name: string;
     description?: string;
@@ -13,7 +13,7 @@ export interface QuestInfo {
     realTime: boolean;
     startDate?: Date;
     endDate?: Date;
-}
+};
 
 export interface QuestWithoutAnswers extends QuestInfo {
     tasks: TaskWithoutAnswer[];

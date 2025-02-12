@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { Quest, QuestInfo } from './quest.entity';
 import { Task } from './task.entity';
 import { TaskDocument } from './schemas/task.schema';
+import { QuestSearchDto } from './DTOs/quest.search.dto';
 
 @Injectable()
 export class QuestRepository {
@@ -24,6 +25,26 @@ export class QuestRepository {
 
     async get(id: string): Promise<Quest | null> {
         return this.find({ id });
+    }
+
+    async search(searchDto: QuestSearchDto): Promise<{ items: QuestInfo[]; total: number }> {
+        const { page = 1, size = 10, userId } = searchDto;
+        const skip = (page - 1) * size;
+        const query = userId ? { ownerId: userId } : {};
+
+        const questsPromise = this.questModel
+            .find(query)
+            .select('-tasks')
+            .skip(skip)
+            .limit(size)
+            .exec();
+
+        const countPromise = this.questModel.countDocuments(query);
+
+        const [quests, total] = await Promise.all([questsPromise, countPromise]);
+
+        const items = quests.map((quest) => quest as QuestInfo);
+        return { items, total };
     }
 
     async exists(id: string): Promise<boolean> {

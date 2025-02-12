@@ -1,4 +1,13 @@
-import { BadRequestException, Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Post,
+    Put,
+    Query,
+} from '@nestjs/common';
 import { QuestCreateDto } from './DTOs/quest.create.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QuestService } from './quest.service';
@@ -7,6 +16,7 @@ import { UserPayloadDto } from 'src/modules/user/DTOs/user.payload.dto';
 import { AuthGuard } from 'src/middlewares/guards/auth.guard';
 import { Quest, QuestWithoutAnswers } from './quest.entity';
 import { QuestRepository } from './quest.repository';
+import { QuestSearchDto } from './DTOs/quest.search.dto';
 
 @ApiTags('Quest')
 @Controller('quest')
@@ -44,6 +54,17 @@ export class QuestController {
         const result: QuestWithoutAnswers = quest.withoutAnswers();
         console.info(result);
         return result;
+    }
+
+    @Put('search')
+    @ApiOperation({ summary: 'Search quest' })
+    @ApiResponse({
+        status: 200,
+        description: 'Quest found',
+        type: Quest,
+    })
+    async searchQuest(@Body() dto: QuestSearchDto) {
+        return this.questRepository.search(dto);
     }
 
     @Get('info')
